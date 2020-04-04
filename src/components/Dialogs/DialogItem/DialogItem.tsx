@@ -1,7 +1,9 @@
 import React from 'react'
 import {NavLink} from 'react-router-dom'
+import {useDispatch} from 'react-redux'
 import {ListItem} from '@material-ui/core'
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
+import {setActiveDialog} from '../../../redux/dialogsActions'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -19,18 +21,20 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 type TProps = {
-    id: number
+    id: string
     name: string
 }
 
 const DialogItem: React.FC<TProps> = ({id, name}) => {
     const classes = useStyles()
+    const dispatch = useDispatch()
     return (
         <ListItem>
             <NavLink
                 className={classes.link}
                 activeClassName={classes.activeLink}
                 to={`/messages/${id}`}
+                onClick={() => dispatch(setActiveDialog(id))}
             >{`${name[0].toUpperCase()}${name.slice(1)}`}</NavLink>
         </ListItem>
     )

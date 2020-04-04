@@ -2,6 +2,8 @@ import React from 'react'
 import './App.css'
 import {BrowserRouter as Router} from 'react-router-dom'
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
+import {Provider} from 'react-redux'
+import store from './redux/store'
 import {Container, Grid} from '@material-ui/core'
 import Header from './components/Header'
 import Navbar from './components/Navbar'
@@ -49,4 +51,12 @@ function App() {
     );
 }
 
-export default App
+const AppContainer = () => {
+    return (
+        <Provider store={store}>
+            <App />
+        </Provider>        
+    )
+}
+
+export default AppContainer

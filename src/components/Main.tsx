@@ -20,7 +20,7 @@ const Main: React.FC<TProps> = () => {
     return (
         <div className={classes.root}>
             <Route path='/profile/:id?' component={Profile} />
-            <Route path='/messages' component={Dialogs} />
+            <Route path='/messages/:id?' component={Dialogs} />
         </div>
     )
 };
