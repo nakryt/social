@@ -4,18 +4,19 @@ import {
     FormControlLabel,
     Checkbox,
     InputLabel,
-    Input,
+    Input, OutlinedInput,
     InputAdornment,
     IconButton,
     FormHelperText,
     Button
 } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
 import {EmailTwoTone, Visibility, VisibilityOff} from '@material-ui/icons'
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
 import {useForm, Controller} from 'react-hook-form'
 import {Redirect} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux'
-import {isAuthSelector} from '../redux/selectors/authSelectors'
+import {isAuthSelector, captchaUrlSelector} from '../redux/selectors/authSelectors'
 import {login} from '../redux/authActions'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
+            paddingTop: theme.spacing(8),
             '& .MuiFormHelperText-root': {
                 position: 'absolute',
                 bottom: -20,
@@ -40,7 +42,13 @@ const useStyles = makeStyles((theme: Theme) =>
         buttonsWrap: {
             display: 'flex',
             justifyContent: 'space-around',
-            marginTop: theme.spacing(2)
+            marginTop: theme.spacing(2),
+            marginBottom: theme.spacing(2)
+        },
+        captchaWrap: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
         }
     })
 )
@@ -49,31 +57,46 @@ type TFormData = {
     email: string
     password: string
     rememberMe: boolean
+    captcha: string | null
 }
 type TProps = {}
 
 const Login: React.FC<TProps> = () => {
     const classes = useStyles()
-    const {handleSubmit, control, reset, errors} = useForm<TFormData>()
+    const {handleSubmit, control, errors} = useForm<TFormData>()
     const [showPassword, setShowPassword] = useState(false)
+    const [error, setError] = useState<null | string>(null)
     const isAuth = useSelector(isAuthSelector)
+    const captchaUrl = useSelector(captchaUrlSelector)
     const dispatch = useDispatch()
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword)
     }
     const [isLogin, setIsLogin] = useState(false)
-    const onSubmit = ({email, password, rememberMe}: TFormData) => {
+    const onSubmit = async ({email, password, rememberMe, captcha = null}: TFormData) => {
         if (isLogin) {
-            dispatch(login(email, password, rememberMe))
-            reset()
+            const res = await dispatch(login(email, password, rememberMe, captcha))
+            if (typeof res === 'string') {
+                setError(res)
+            }
         } else {
             // console.log('SignUp:', data)
         }
     }
 
+    const handleCloseAlert = () => {
+        setError(null)
+    }
+
     return (
         <>
             {isAuth && <Redirect to='/profile'/>}
+            {
+                error &&
+                <Alert onClose={handleCloseAlert} severity="error" variant='filled' style={{position: 'absolute'}} >
+                    {error}
+                </Alert>
+            }
             <form className={classes.root} onSubmit={handleSubmit(onSubmit)}>
                 <FormControl className={classes.marginBottom}>
                     <InputLabel>Email</InputLabel>
@@ -138,6 +161,20 @@ const Login: React.FC<TProps> = () => {
                     }
                     label="Remember Me"
                 />
+
+                {
+                    captchaUrl &&
+                        <div className={classes.captchaWrap}>
+                            <img src={captchaUrl} alt='Captcha' style={{width: 200, height: 'auto'}} />
+                            <Controller
+                                name='captcha'
+                                control={control}
+                                defaultValue=''
+                                as={<OutlinedInput/>}
+                            />
+                        </div>
+                }
+
                 <div className={classes.buttonsWrap}>
                     <Button
                         variant='contained'
@@ -152,9 +189,10 @@ const Login: React.FC<TProps> = () => {
                         onClick={() => setIsLogin(false)}
                     >Sign Up</Button>
                 </div>
+
             </form>
         </>
     )
-};
+}
 
-export default Login;
+export default Login

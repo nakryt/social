@@ -22,10 +22,17 @@ type TResponseLogin = { data: {userId: number}, messages: Array<string>, resultC
 
 const login = async (email: string, password: string, rememberMe: boolean = false, captcha: null | string = null):Promise<TResponseLogin> => {
     try {
-        const response = await instance.post('auth/login', { email, password, rememberMe, captcha })
-        return response.data
+        return (await instance.post('auth/login', { email, password, rememberMe, captcha })).data
     } catch (e) {
         throw new Error(e.message)
+    }
+}
+
+const logout = async () => {
+    try {
+        return (await instance.delete('auth/login')).data
+    } catch (e) {
+
     }
 }
 
@@ -34,5 +41,6 @@ const getCaptcha = async () => await instance.get<{url: string}>('security/get-c
 export default {
     me,
     login,
+    logout,
     getCaptcha
 }

@@ -11,7 +11,7 @@ const Posts: React.FC<TProps> = ({ posts }) => {
 
     return (
         <List>
-            { posts.map(({id, text}) => <PostItem key={id} id={id} post={text}/>) }
+            { posts.map(item => <PostItem key={item.id} {...item} />) }
         </List>
     )
 };

@@ -37,7 +37,7 @@ export const auth = ():TThunkResult<Promise<number>> => async (dispatch) => {
         } else {
             const {data: {id, email, login}} = response
             dispatch(setUserData(id, email, login, true))
-            return 0
+            return ResultCode.Success
         }
     } catch (e) {
         return ResultCode.Error
@@ -45,25 +45,34 @@ export const auth = ():TThunkResult<Promise<number>> => async (dispatch) => {
 }
 export const setUserData = (userId: number | null, email: string | null, login: string | null, isAuth: boolean):TSetUserData =>
     ({ type: SET_USER_DATA, payload: { userId, email, login, isAuth} })
-export const login = (email: string, password: string, rememberMe: boolean = false):TThunkResult<Promise<number>> => async (dispatch, getState) => {
-    try {
-        const {auth: {captchaUrl}} = getState()
-        const response = await authAPI.login(email, password, rememberMe, captchaUrl)
-        if (response.resultCode === ResultCode.Error) {
-            return 1
-        }
-        if (response.resultCode === ResultCode.Success) {
-            await dispatch(auth())
-            captchaUrl && dispatch(setCaptchaUrlAC(null))
-            return 0
-        } else if (response.resultCode === ResultCodeForCaptcha.Captcha) {
-            await dispatch(setCaptchaUrl())
-            return ResultCodeForCaptcha.Captcha
-        }
-        return 1
+export const login = (email: string, password: string, rememberMe: boolean = false, captcha: null | string = null):TThunkResult<Promise<number | string>> =>
+    async (dispatch, getState) => {
+        try {
+            const { auth: {captchaUrl} } = getState()
+            const response = await authAPI.login(email, password, rememberMe, captcha)
+            if (response.resultCode === ResultCode.Success) {
+                await dispatch(auth())
+                captchaUrl && dispatch(setCaptchaUrlAC(null))
+                return ResultCode.Success
+            } else if (response.resultCode === ResultCodeForCaptcha.Captcha) {
+                await dispatch(setCaptchaUrl())
+            }
+            return response.messages[0]
 
+        } catch (e) {
+            return ResultCode.Error
+        }
+    }
+export const logout = ():TThunkResult<Promise<number>> => async (dispatch) => {
+    try {
+        const response = await authAPI.logout()
+        if (response.resultCode === ResultCode.Success) {
+            dispatch(setUserData(null, null, null, false))
+            return ResultCode.Success
+        }
+        return ResultCode.Error
     } catch (e) {
-        return 1
+        return ResultCode.Error
     }
 }
 export const setCaptchaUrlAC = (url: string | null):TSetCaptchaUrl => ({ type: SET_CAPTCHA_URL, payload: {url} })
