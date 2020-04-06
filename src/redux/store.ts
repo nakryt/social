@@ -3,10 +3,12 @@ import thunk from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import profile from './profileReducer'
 import dialogs from './dialogsReducer'
+import auth from './authReducer'
 
 const reducers = combineReducers({
     profile,
-    dialogs
+    dialogs,
+    auth
 })
 const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)))
 

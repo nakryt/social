@@ -19,6 +19,6 @@ export type TDeletePost = {
 }
 export type TProfileActions = TAddPost | TChangePost | TDeletePost
 
-export const addPost = (text: string) => ({ type: ADD_POST, payload: text })
-export const changePost = (id: string, text: string) => ({ type: CHANGE_POST, payload: {id, text} })
-export const deletePost = (id: string) => ({ type: DELETE_POST, payload: id })
+export const addPost = (text: string):TAddPost => ({ type: ADD_POST, payload: text })
+export const changePost = (id: string, text: string):TChangePost => ({ type: CHANGE_POST, payload: {id, text} })
+export const deletePost = (id: string):TDeletePost => ({ type: DELETE_POST, payload: id })

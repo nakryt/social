@@ -15,17 +15,17 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
         },
         main: {
-            marginTop: theme.spacing(2),
-            marginBottom: theme.spacing(2)
+            padding: theme.spacing(2),
+            marginTop: 0,
+            '& .mainContent': {
+                flexGrow: 1,
+                justifyContent: 'center',
+                paddingTop: 0,
+                paddingRight: 0,
+            }
         },
         navbar: {
-            width: 200,
             backgroundColor: theme.palette.primary.main,
-            marginRight: theme.spacing(2)
-        },
-        mainContent: {
-            width: '70%',
-            flexGrow: 1
         }
     }),
 )
@@ -35,17 +35,20 @@ function App() {
     return (
         <div className="App">
             <Router>
+
                 <Container>
+
                     <Header/>
-                    <Grid container className={classes.main}>
-                        <Grid item className={classes.navbar}>
+                    <Grid container className={classes.main} spacing={4}>
+                        <Grid container xs={4} sm={3} md={2} item className={classes.navbar} spacing={0}>
                             <Navbar/>
                         </Grid>
-                        <Grid item className={classes.mainContent}>
-                            <Main />
+                        <Grid container xs={8} sm={9} md={10} item className={'mainContent'} spacing={0}>
+                            <Main/>
                         </Grid>
                     </Grid>
                 </Container>
+
             </Router>
         </div>
     );
@@ -54,8 +57,8 @@ function App() {
 const AppContainer = () => {
     return (
         <Provider store={store}>
-            <App />
-        </Provider>        
+            <App/>
+        </Provider>
     )
 }
 

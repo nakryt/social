@@ -1,0 +1,73 @@
+import {ThunkAction} from 'redux-thunk'
+import {TStore} from './store'
+import authAPI, { ResultCode, ResultCodeForCaptcha } from '../api/authAPI'
+
+export const SET_IS_AUTH = 'AUTH/SET_IS_AUTH'
+export const SET_USER_DATA = 'AUTH/SET_USER_DATA'
+export const SET_CAPTCHA_URL = 'AUTH/SET_CAPTCHA_URL'
+
+type TSetIsAuth = {
+    type: typeof SET_IS_AUTH
+    payload: boolean
+}
+type TUserData = {
+    userId: number | null
+    email: string | null
+    login: string | null
+    isAuth: boolean
+}
+type TSetUserData = {
+    type: typeof SET_USER_DATA
+    payload: TUserData
+}
+type TSetCaptchaUrl = {
+    type: typeof SET_CAPTCHA_URL
+    payload: {url: string | null}
+}
+
+export type TAuthActions = TSetIsAuth | TSetUserData | TSetCaptchaUrl
+export type TThunkResult<R> = ThunkAction<R, TStore, null, TAuthActions>
+
+export const setIsAuth = (value: boolean):TSetIsAuth => ({ type: SET_IS_AUTH, payload: value })
+export const auth = ():TThunkResult<Promise<number>> => async (dispatch) => {
+    try {
+        const response = await authAPI.me()
+        if (response.resultCode === ResultCode.Error) {
+            return ResultCode.Error
+        } else {
+            const {data: {id, email, login}} = response
+            dispatch(setUserData(id, email, login, true))
+            return 0
+        }
+    } catch (e) {
+        return ResultCode.Error
+    }
+}
+export const setUserData = (userId: number | null, email: string | null, login: string | null, isAuth: boolean):TSetUserData =>
+    ({ type: SET_USER_DATA, payload: { userId, email, login, isAuth} })
+export const login = (email: string, password: string, rememberMe: boolean = false):TThunkResult<Promise<number>> => async (dispatch, getState) => {
+    try {
+        const {auth: {captchaUrl}} = getState()
+        const response = await authAPI.login(email, password, rememberMe, captchaUrl)
+        if (response.resultCode === ResultCode.Error) {
+            return 1
+        }
+        if (response.resultCode === ResultCode.Success) {
+            await dispatch(auth())
+            captchaUrl && dispatch(setCaptchaUrlAC(null))
+            return 0
+        } else if (response.resultCode === ResultCodeForCaptcha.Captcha) {
+            await dispatch(setCaptchaUrl())
+            return ResultCodeForCaptcha.Captcha
+        }
+        return 1
+
+    } catch (e) {
+        return 1
+    }
+}
+export const setCaptchaUrlAC = (url: string | null):TSetCaptchaUrl => ({ type: SET_CAPTCHA_URL, payload: {url} })
+export const setCaptchaUrl = ():TThunkResult<Promise<void>> => async (dispatch) => {
+    const res = await authAPI.getCaptcha()
+    dispatch(setCaptchaUrlAC(res.data.url))
+}

@@ -1,11 +1,15 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {postsSelector} from '../../redux/selectors/profileSelectors'
 import {addPost} from '../../redux/profileActions'
+import {auth, login} from '../../redux/authActions'
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
+
 import mainPicture from './main.jpg'
 import Posts from './Posts/Posts'
 import TextFieldWithButton from '../UI/TextFieldWithButton'
+import authAPI from '../../api/authAPI';
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -35,6 +39,7 @@ const Profile: React.FC<TProps> = () => {
     const addPostHandler = (value: string) => {
         dispatch(addPost(value))
     }
+
     return (
         <div>
             <div className={classes.imgWrapper}>

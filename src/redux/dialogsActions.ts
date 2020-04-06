@@ -12,5 +12,5 @@ export type TSendMessage = {
 
 export type TDialogsActions = TSetActiveDialog | TSendMessage
 
-export const setActiveDialog = (id:string) => ({ type: SET_ACTIVE_DIALOG, payload: id })
-export const sendMessage = (text:string) => ({ type: SEND_MESSAGE, payload: text })
+export const setActiveDialog = (id:string):TSetActiveDialog => ({ type: SET_ACTIVE_DIALOG, payload: id })
+export const sendMessage = (text:string):TSendMessage => ({ type: SEND_MESSAGE, payload: text })

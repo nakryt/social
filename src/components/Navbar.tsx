@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
         },
         list: {
-            padding: theme.spacing(2),
+            // padding: theme.spacing(2),
             paddingTop: theme.spacing(4),
         },
         link: {
