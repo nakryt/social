@@ -1,5 +1,5 @@
 import React from 'react'
-import {TPosts} from '../../../redux/profileReducer'
+import {TPosts} from '../../../types/profile'
 import {List} from '@material-ui/core'
 import PostItem from './PostItem'
 

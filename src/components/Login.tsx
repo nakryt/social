@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     FormControl,
     FormControlLabel,
@@ -17,7 +17,7 @@ import {useForm, Controller} from 'react-hook-form'
 import {Redirect} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux'
 import {isAuthSelector, captchaUrlSelector} from '../redux/selectors/authSelectors'
-import {login} from '../redux/authActions'
+import {auth, login} from '../redux/authActions'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -83,6 +83,10 @@ const Login: React.FC<TProps> = () => {
             // console.log('SignUp:', data)
         }
     }
+
+    useEffect(() => {
+        dispatch(auth())
+    }, [dispatch])
 
     const handleCloseAlert = () => {
         setError(null)

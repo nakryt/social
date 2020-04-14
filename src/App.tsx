@@ -1,10 +1,15 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './App.css'
 import {BrowserRouter as Router} from 'react-router-dom'
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
-import {Provider} from 'react-redux'
+
+import {Provider, useSelector, useDispatch} from 'react-redux'
 import store from './redux/store'
-import {Container, Grid} from '@material-ui/core'
+import {initialization as initSelector} from './redux/selectors/appSelectors'
+import {initialization as init} from './redux/appActions'
+
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
+import {Container, Grid, CircularProgress} from '@material-ui/core'
+
 import Header from './components/Header'
 import Navbar from './components/Navbar'
 import Main from './components/Main'
@@ -21,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 flexGrow: 1,
                 justifyContent: 'center',
                 paddingTop: 0,
+                paddingBottom: 0,
                 paddingRight: 0,
             }
         },
@@ -32,22 +38,30 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function App() {
     const classes = useStyles()
+    const dispatch = useDispatch()
+    const initialization = useSelector(initSelector)
+
+    useEffect(() => {
+        dispatch(init())
+    }, [dispatch])
+
     return (
         <div className="App">
             <Router>
-
-                <Container>
-
-                    <Header/>
-                    <Grid container className={classes.main} spacing={4}>
-                        <Grid container xs={4} sm={3} md={2} item className={classes.navbar} spacing={0}>
-                            <Navbar/>
+                {
+                    initialization ? <CircularProgress size={120} /> :
+                    <Container>
+                        <Header/>
+                        <Grid container className={classes.main} spacing={4}>
+                            <Grid container xs={4} sm={3} md={2} item className={classes.navbar} spacing={0}>
+                                <Navbar/>
+                            </Grid>
+                            <Grid container xs={8} sm={9} md={10} item className={'mainContent'} spacing={0}>
+                                <Main/>
+                            </Grid>
                         </Grid>
-                        <Grid container xs={8} sm={9} md={10} item className={'mainContent'} spacing={0}>
-                            <Main/>
-                        </Grid>
-                    </Grid>
-                </Container>
+                    </Container>
+                }
 
             </Router>
         </div>

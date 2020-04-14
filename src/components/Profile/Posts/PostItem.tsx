@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import './PostItem.css'
 import {useDispatch} from 'react-redux'
 import {changePost, deletePost} from '../../../redux/profileActions'
@@ -31,12 +31,14 @@ type TProps = {
 
 const PostItem: React.FC<TProps> = ({ id, text, likes }) => {
     const classes = useStyles()
+    const postRef = useRef<HTMLSpanElement>(null)
     const dispatch = useDispatch()
     const [isEdit, setIsEdit] = useState(false)
     const savePostHandler = (text: string) => {
         dispatch(changePost(id, text))
         setIsEdit(false)
     }
+
     return (
         <ListItem className='postWrapper'>
             <div className={`${classes.postWrapper}`} >
@@ -47,8 +49,9 @@ const PostItem: React.FC<TProps> = ({ id, text, likes }) => {
                             text={text}
                             editCancel={() => setIsEdit(false)}
                             onSave={savePostHandler}
+                            width={postRef && postRef.current ? postRef.current.offsetWidth : 200}
                         />  :
-                        <span>{text}</span>
+                        <span ref={postRef}>{text}</span>
                 }
 
                 <LikeWithBadge numLikes={likes}/>

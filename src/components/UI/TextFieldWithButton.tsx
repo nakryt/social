@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: '100%',
-            maxWidth: 500
+            maxWidth: 700
         },
         form: {
             width: '100%'

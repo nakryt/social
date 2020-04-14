@@ -1,12 +1,6 @@
 import instance from './instance'
+// import {ResultCode, ResultCodeForCaptcha} from '../types/resultCodes'
 
-export enum ResultCode {
-    Success = 0,
-    Error = 1
-}
-export enum ResultCodeForCaptcha {
-    Captcha = 10
-}
 
 type TResponseMe = { data: {email: string, login: string, id: number}, messages: Array<string>, resultCode: number}
 const me = async ():Promise<TResponseMe> => {

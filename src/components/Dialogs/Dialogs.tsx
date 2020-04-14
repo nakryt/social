@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import {useSelector, useDispatch} from 'react-redux'
-import {RouteComponentProps} from 'react-router-dom'
+import {RouteComponentProps, Redirect} from 'react-router-dom'
 import {activeDialogsSelector} from '../../redux/selectors/dialogsSelectors'
+import {isAuthSelector} from '../../redux/selectors/authSelectors'
 import {sendMessage, setActiveDialog} from '../../redux/dialogsActions'
 import {List, Grid} from '@material-ui/core';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
@@ -22,7 +23,6 @@ const useStyles = makeStyles((theme: Theme) =>
         messages: {
             height: '62vh',
             overflow: 'auto',
-            padding: theme.spacing(2),
         },
         input: {
             justifyContent: 'flex-end'
@@ -35,6 +35,7 @@ type TProps = {}
 const Dialogs: React.SFC<TProps & RouteComponentProps<{ id: string }>> = ({match}) => {
     const classes = useStyles()
     const dispatch = useDispatch()
+    const isAuth = useSelector(isAuthSelector)
     const activeDialogs = useSelector(activeDialogsSelector)
     const selectedDialogId = match.params.id
 
@@ -50,6 +51,7 @@ const Dialogs: React.SFC<TProps & RouteComponentProps<{ id: string }>> = ({match
     }
     return (
         <Grid container>
+            { !isAuth && <Redirect to='/' />}
             <Grid item container className={classes.dialogsWrapper}>
                 <Grid item sm={4}>
                     <List className={classes.dialogs}>

@@ -1,6 +1,9 @@
 import {ThunkAction} from 'redux-thunk'
 import {TStore} from './store'
-import authAPI, { ResultCode, ResultCodeForCaptcha } from '../api/authAPI'
+import authAPI from '../api/authAPI'
+import {getProfile} from './profileActions'
+import { ResultCode, ResultCodeForCaptcha } from '../types/resultCodes'
+import {ProfileType} from '../types/profile'
 
 export const SET_IS_AUTH = 'AUTH/SET_IS_AUTH'
 export const SET_USER_DATA = 'AUTH/SET_USER_DATA'
@@ -37,6 +40,7 @@ export const auth = ():TThunkResult<Promise<number>> => async (dispatch) => {
         } else {
             const {data: {id, email, login}} = response
             dispatch(setUserData(id, email, login, true))
+            dispatch(getProfile(id, ProfileType.Owner))
             return ResultCode.Success
         }
     } catch (e) {

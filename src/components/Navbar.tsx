@@ -31,7 +31,7 @@ const template = [
     {id: 2, to: '/messages', label: 'messages'},
     {id: 3, to: '/news', label: 'news'},
     {id: 4, to: '/music', label: 'music'},
-    {id: 5, to: '/settings', label: 'settings'},
+    {id: 5, to: '/users', label: 'users'},
 ]
 const Navbar: React.FC<TProps> = () => {
     const classes = useStyles()
