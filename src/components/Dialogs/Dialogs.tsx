@@ -6,7 +6,7 @@ import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
 
 import {root as dialogsRootSelector, dialogs as dialogsSelector, messages as messagesSelector} from '../../redux/selectors/dialogsSelectors'
 import {isAuthSelector} from '../../redux/selectors/authSelectors'
-import {getDialogs, getMessages, sendMessage, setActiveDialog} from '../../redux/dialogsActions'
+import actions, {getDialogs, getMessages, sendMessage} from '../../redux/dialogsActions'
 
 import DialogItem from './DialogItem/DialogItem'
 import Messages from './Messages/Messages'
@@ -55,7 +55,7 @@ const Dialogs: React.SFC<TProps & RouteComponentProps<{ id: string }>> = ({match
         }
         fetchData()
         return () => {isCancel = true}
-    }, [getDialogs, dispatch])
+    }, [dispatch])
 
     const sendHandler = (value: string) => {
         dialogsRoot.selectedDialog && dispatch(sendMessage(dialogsRoot.selectedDialog, value))
@@ -74,7 +74,7 @@ const Dialogs: React.SFC<TProps & RouteComponentProps<{ id: string }>> = ({match
                                     name={userName}
                                     onClick={() => {
                                         dispatch(getMessages(id))
-                                        dispatch(setActiveDialog(id))
+                                        dispatch(actions.setActiveDialog(id))
                                     }}
                                 />)
                         }

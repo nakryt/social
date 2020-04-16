@@ -1,23 +1,25 @@
+import {Nullable} from './app'
+
 export type TContacts = {
-    github: string | null
-    vk: string | null
-    facebook: string | null
-    instagram: string | null
-    twitter: string | null
-    website: string | null
-    youtube: string | null
-    mainLink: string | null
+    github: Nullable<string>
+    vk: Nullable<string>
+    facebook: Nullable<string>
+    instagram: Nullable<string>
+    twitter: Nullable<string>
+    website: Nullable<string>
+    youtube: Nullable<string>
+    mainLink: Nullable<string>
 }
 export type TPhotos = {
-    small: string | null
-    large: string | null
+    small: Nullable<string>
+    large: Nullable<string>
 }
 export type TProfile = {
-    userId: number | null
-    aboutMe: string | null
-    lookingForAJob: boolean | null
-    lookingForAJobDescription: string | null
-    fullName: string | null
+    userId: Nullable<number>
+    aboutMe: Nullable<string>
+    lookingForAJob: Nullable<boolean>
+    lookingForAJobDescription: Nullable<string>
+    fullName: Nullable<string>
     contacts: TContacts
     photos: TPhotos
 }

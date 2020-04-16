@@ -2,51 +2,32 @@ import {SET_PROFILE, SET_STATUS, ADD_POST, CHANGE_POST, TProfileActions, DELETE_
 import {TProfile, TPosts} from '../types/profile'
 import {ProfileType} from '../types/profile'
 
+const initialProfile = {
+    userId: null,
+    aboutMe: null,
+    lookingForAJob: null,
+    lookingForAJobDescription: null,
+    fullName: null,
+    contacts: {
+        facebook: null,
+        vk: null,
+        github: null,
+        youtube: null,
+        instagram: null,
+        mainLink: null,
+        twitter: null,
+        website: null
+    },
+    photos: {
+        small: null,
+        large: null
+    }
+} as TProfile
 
 const initialState = {
     loading: false,
-    userProfile: {
-        userId: null as null | number,
-        aboutMe: null as null | string,
-        lookingForAJob: null as null | boolean,
-        lookingForAJobDescription: null as null | string,
-        fullName: null as null | string,
-        contacts: {
-            facebook: null as null | string,
-            vk: null as null | string,
-            github: null as null | string,
-            youtube: null as null | string,
-            instagram: null as null | string,
-            mainLink: null as null | string,
-            twitter: null as null | string,
-            website: null as null | string
-        },
-        photos: {
-            small: null as null | string,
-            large: null as null | string
-        }
-    } as TProfile,
-    ownerProfile: {
-        userId: null as null | number,
-        aboutMe: null as null | string,
-        lookingForAJob: null as null | boolean,
-        lookingForAJobDescription: null as null | string,
-        fullName: null as null | string,
-        contacts: {
-            facebook: null as null | string,
-            vk: null as null | string,
-            github: null as null | string,
-            youtube: null as null | string,
-            instagram: null as null | string,
-            mainLink: null as null | string,
-            twitter: null as null | string,
-            website: null as null | string
-        },
-        photos: {
-            small: null as null | string,
-            large: null as null | string
-        }
-    } as TProfile,
+    userProfile: initialProfile,
+    ownerProfile: initialProfile,
     status: null as null | string,
     posts: [
         {id: '1', text: 'Life is beautiful', likes: 3},

@@ -38,8 +38,10 @@ const setStatus = async (status: string): Promise<number | string> => {
 const setProfileInfo = async (data: TProfile): Promise<number> => {
     try {
         const response = await instance.put('profile', data)
-        
-        return ResultCode.Success
+        if (response.data.resultCode === ResultCode.Success) {
+            return ResultCode.Success
+        }
+        return ResultCode.Error
     } catch (e) {
         return ResultCode.Error
     }

@@ -41,7 +41,7 @@ const getAllDialogs = async () => {
 
 const sendMessage = async (userId: number, text: string) => {
     try {
-        const res = await instance.put(`dialogs/${userId}`)
+        // const res = await instance.put(`dialogs/${userId}`)
         const response = (await instance.post(`dialogs/${userId}/messages`, {body: text}))
         debugger
         return response.data

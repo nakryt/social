@@ -4,10 +4,9 @@ import {CircularProgress} from '@material-ui/core'
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
 import {useSelector, useDispatch} from 'react-redux'
 import {postsSelector} from '../../redux/selectors/profileSelectors'
-import {addPost} from '../../redux/profileActions'
+import actions from '../../redux/profileActions'
 import {userIdSelector} from '../../redux/selectors/authSelectors'
 import {getProfile, getStatus} from '../../redux/profileActions'
-import {auth} from '../../redux/authActions'
 
 import mainPicture from './main.jpg'
 import UserInfo from './UserInfo/UserInfo/UserInfo'
@@ -50,11 +49,10 @@ const Profile: React.FC<RouteComponentProps<MatchProps>> = ({match: {params}}) =
     const posts = useSelector(postsSelector)
     const [loading, setLoading] = useState(true)
     const addPostHandler = (value: string) => {
-        dispatch(addPost(value))
+        dispatch(actions.addPost(value))
     }
 
     useEffect(() => {
-        // dispatch(auth())
         let isCancel = false
         const fetchData = async () => {
             if (!isCancel && userId) {
