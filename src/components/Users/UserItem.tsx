@@ -5,7 +5,6 @@ import {Card, Avatar, Button} from '@material-ui/core'
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles'
 import {setFollowing} from '../../redux/usersActions'
 import {followingInProgress} from '../../redux/selectors/usersSelectors'
-import {ReactComponent as DefaultAvatar} from '../../assets/man.svg'
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({

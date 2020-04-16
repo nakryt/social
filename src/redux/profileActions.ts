@@ -32,7 +32,7 @@ export type TSetProfile = {
     type: typeof SET_PROFILE
     payload: {
         profile:TProfile
-        typeProfile: 'owner' | 'other'
+        typeProfile: ProfileType
     }
 }
 export type TSetStatus = {
@@ -52,12 +52,19 @@ export const addPost = (text: string):TAddPost => ({ type: ADD_POST, payload: te
 export const changePost = (id: string, text: string):TChangePost => ({ type: CHANGE_POST, payload: {id, text} })
 export const deletePost = (id: string):TDeletePost => ({ type: DELETE_POST, payload: id })
 
-export const setProfile = (profile: TProfile, typeProfile: TProfileType = ProfileType.Other):TSetProfile => ({ type: SET_PROFILE, payload: {profile, typeProfile} })
-export const getProfile = (userId: number, typeProfile: TProfileType = ProfileType.Other):TThunkResult<Promise<void>> => async (dispatch) => {
+export const setProfile = (profile: TProfile, typeProfile: TProfileType = ProfileType.Other):TSetProfile =>
+                        ({ type: SET_PROFILE, payload: {profile, typeProfile} })
+export const getProfile = (userId: number, typeProfile: TProfileType = ProfileType.Other):TThunkResult<Promise<void>> => async (dispatch, getState) => {
     try {
-        const res = await profileAPI.getProfile(userId)
-        if (typeof res !== 'number') {
-            dispatch(setProfile( utils.changeEmptyValues(res) as TProfile, typeProfile ))
+        const {profile: {userProfile, ownerProfile}} = getState()
+        if (userProfile.userId !== userId) {
+            if (ownerProfile.userId === userId) {
+                dispatch(setProfile(ownerProfile))
+            } else {
+                const res = await profileAPI.getProfile(userId)
+                typeof res !== 'number' &&
+                    dispatch(setProfile( utils.changeEmptyValues(res) as TProfile, typeProfile ))
+            }
         }
     } catch (e) {
 

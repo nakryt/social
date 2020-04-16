@@ -6,45 +6,45 @@ import {ProfileType} from '../types/profile'
 const initialState = {
     loading: false,
     userProfile: {
-        userId: null,
-        aboutMe: null,
-        lookingForAJob: null,
-        lookingForAJobDescription: null,
-        fullName: null,
+        userId: null as null | number,
+        aboutMe: null as null | string,
+        lookingForAJob: null as null | boolean,
+        lookingForAJobDescription: null as null | string,
+        fullName: null as null | string,
         contacts: {
-            facebook: null,
-            vk: null,
-            github: null,
-            youtube: null,
-            instagram: null,
-            mainLink: null,
-            twitter: null,
-            website: null
+            facebook: null as null | string,
+            vk: null as null | string,
+            github: null as null | string,
+            youtube: null as null | string,
+            instagram: null as null | string,
+            mainLink: null as null | string,
+            twitter: null as null | string,
+            website: null as null | string
         },
         photos: {
-            small: null,
-            large: null
+            small: null as null | string,
+            large: null as null | string
         }
     } as TProfile,
     ownerProfile: {
-        userId: null,
-        aboutMe: null,
-        lookingForAJob: null,
-        lookingForAJobDescription: null,
-        fullName: null,
+        userId: null as null | number,
+        aboutMe: null as null | string,
+        lookingForAJob: null as null | boolean,
+        lookingForAJobDescription: null as null | string,
+        fullName: null as null | string,
         contacts: {
-            facebook: null,
-            vk: null,
-            github: null,
-            youtube: null,
-            instagram: null,
-            mainLink: null,
-            twitter: null,
-            website: null
+            facebook: null as null | string,
+            vk: null as null | string,
+            github: null as null | string,
+            youtube: null as null | string,
+            instagram: null as null | string,
+            mainLink: null as null | string,
+            twitter: null as null | string,
+            website: null as null | string
         },
         photos: {
-            small: null,
-            large: null
+            small: null as null | string,
+            large: null as null | string
         }
     } as TProfile,
     status: null as null | string,

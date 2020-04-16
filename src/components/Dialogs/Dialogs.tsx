@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {RouteComponentProps, Redirect} from 'react-router-dom'
-import {activeDialogsSelector} from '../../redux/selectors/dialogsSelectors'
-import {isAuthSelector} from '../../redux/selectors/authSelectors'
-import {sendMessage, setActiveDialog} from '../../redux/dialogsActions'
 import {List, Grid} from '@material-ui/core';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
+
+import {root as dialogsRootSelector, dialogs as dialogsSelector, messages as messagesSelector} from '../../redux/selectors/dialogsSelectors'
+import {isAuthSelector} from '../../redux/selectors/authSelectors'
+import {getDialogs, getMessages, sendMessage, setActiveDialog} from '../../redux/dialogsActions'
+
 import DialogItem from './DialogItem/DialogItem'
 import Messages from './Messages/Messages'
 import TextFieldWithButton from '../UI/TextFieldWithButton'
@@ -36,18 +38,27 @@ const Dialogs: React.SFC<TProps & RouteComponentProps<{ id: string }>> = ({match
     const classes = useStyles()
     const dispatch = useDispatch()
     const isAuth = useSelector(isAuthSelector)
-    const activeDialogs = useSelector(activeDialogsSelector)
+    const dialogs = useSelector(dialogsSelector)
+    const dialogsRoot = useSelector(dialogsRootSelector)
+    const messages = useSelector(messagesSelector)
     const selectedDialogId = match.params.id
 
-    const activeMessages = activeDialogs.find(i => i.id === selectedDialogId)
-    const messages = (activeMessages && activeMessages.messages) || []
-
     useEffect(() => {
-        dispatch(setActiveDialog(selectedDialogId))
+        // dispatch(setActiveDialog(selectedDialogId))
     }, [selectedDialogId, dispatch]);
+    useEffect(() => {
+        let isCancel = false
+        const fetchData = async () => {
+            if (!isCancel) {
+                await dispatch(getDialogs())
+            }
+        }
+        fetchData()
+        return () => {isCancel = true}
+    }, [getDialogs, dispatch])
 
     const sendHandler = (value: string) => {
-        dispatch(sendMessage(value))
+        dialogsRoot.selectedDialog && dispatch(sendMessage(dialogsRoot.selectedDialog, value))
     }
     return (
         <Grid container>
@@ -56,7 +67,16 @@ const Dialogs: React.SFC<TProps & RouteComponentProps<{ id: string }>> = ({match
                 <Grid item sm={4}>
                     <List className={classes.dialogs}>
                         {
-                            activeDialogs.map(({id, name}) => <DialogItem key={id} id={id} name={name}/>)
+                            dialogs.map(({id, userName}) =>
+                                <DialogItem
+                                    key={id}
+                                    id={id}
+                                    name={userName}
+                                    onClick={() => {
+                                        dispatch(getMessages(id))
+                                        dispatch(setActiveDialog(id))
+                                    }}
+                                />)
                         }
                     </List>
                 </Grid>

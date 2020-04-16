@@ -113,7 +113,6 @@ export const getUsers = (pageNumber: number, pageSize: number = 8) :TThunkResult
 
 export const initialization = (): TThunkResult<Promise<void>> => async (dispatch, getState) => {
     const pageSize = getState().users.pageSize    
-    // dispatch(setLoading(true))
     await dispatch(getUsers(1, pageSize))
     dispatch(setLoading(false))
 }

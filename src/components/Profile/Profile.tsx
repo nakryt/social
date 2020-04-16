@@ -1,5 +1,6 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {RouteComponentProps, Redirect} from 'react-router-dom'
+import {CircularProgress} from '@material-ui/core'
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
 import {useSelector, useDispatch} from 'react-redux'
 import {postsSelector} from '../../redux/selectors/profileSelectors'
@@ -16,6 +17,11 @@ import TextFieldWithButton from '../UI/TextFieldWithButton'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        root: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
         imgWrapper: {
             width: '100%',
             marginBottom: theme.spacing(2)
@@ -34,41 +40,51 @@ const useStyles = makeStyles((theme: Theme) =>
 interface MatchProps {
     id: string 
 }
-interface TProps extends RouteComponentProps<MatchProps> {
-    
-}
 
-const Profile: React.FC<TProps> = ({match: {params}}) => {
+const Profile: React.FC<RouteComponentProps<MatchProps>> = ({match: {params}}) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
     const id = useSelector(userIdSelector)
     const userId = Number(params.id) || id 
     const posts = useSelector(postsSelector)
+    const [loading, setLoading] = useState(true)
     const addPostHandler = (value: string) => {
         dispatch(addPost(value))
     }
 
     useEffect(() => {
-        dispatch(auth())
-        if (userId) {
-            dispatch(getProfile(userId))
-            dispatch(getStatus(userId))
+        // dispatch(auth())
+        let isCancel = false
+        const fetchData = async () => {
+            if (!isCancel && userId) {
+                await dispatch(getProfile(userId))
+                await dispatch(getStatus(userId))
+            }        
+            setLoading(false)
         }
+        fetchData()
+        
+        return () => {isCancel = true}
 
-    }, [dispatch, userId])
+    }, [dispatch, userId, setLoading])
 
     return (
         <div>
             {!userId && <Redirect to='/' />}
-            <div className={classes.imgWrapper}>
-                <img className={classes.backPicture} src={mainPicture} alt="back"/>
-            </div>
-            <UserInfo />
-            <Posts posts={posts}/>
-            <div className={classes.posts}>
-                <TextFieldWithButton onClick={addPostHandler} buttonName='add post'/>
-            </div>
+            {
+                loading ? <CircularProgress size={120} /> :
+                    <>
+                        <div className={classes.imgWrapper}>
+                            <img className={classes.backPicture} src={mainPicture} alt="back"/>
+                        </div>
+                        <UserInfo />
+                        <Posts posts={posts}/>
+                        <div className={classes.posts}>
+                            <TextFieldWithButton onClick={addPostHandler} buttonName='add post'/>
+                        </div>
+                    </>
+            }            
         </div>
     )
 };

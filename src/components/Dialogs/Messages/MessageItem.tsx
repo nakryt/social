@@ -1,7 +1,10 @@
 import React from 'react'
+import {useSelector} from 'react-redux'
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles'
-import {TTypeMessage} from '../../../redux/dialogsReducer'
 import {Avatar, ListItem} from '@material-ui/core'
+
+import {userIdSelector} from '../../../redux/selectors/authSelectors'
+import {TTypeMessage} from '../../../redux/dialogsReducer'
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -25,17 +28,19 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 type TProps = {
+    id: number
     text: string
-    type: TTypeMessage
+    type?: TTypeMessage
 }
 
-const MessageItem: React.FC<TProps> = ({text, type}) => {
+const MessageItem: React.FC<TProps> = ({text, type, id}) => {
     const classes = useStyles()
-    const send = type === TTypeMessage.send
+    const userId = useSelector(userIdSelector)
+    const recipient = userId === id
     return (
-        <ListItem dense className={classes.root} style={{justifyContent: send ? 'flex-end' : 'flex-start'}}>
+        <ListItem dense className={classes.root} style={{justifyContent: !recipient ? 'flex-end' : 'flex-start'}}>
             <div className={classes.textWrapper}>
-                <Avatar variant='circle' style={{order: send ? 1 : 0}}/>
+                <Avatar variant='circle' style={{order: !recipient ? 1 : 0}}/>
                 <span className={classes.text}>{text}</span>
             </div>
         </ListItem>

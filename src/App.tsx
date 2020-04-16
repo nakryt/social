@@ -17,7 +17,7 @@ import Main from './components/Main'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            display: 'flex',
+            minHeight: '100vh'
         },
         main: {
             padding: theme.spacing(2),
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
             '& .mainContent': {
                 flexGrow: 1,
                 justifyContent: 'center',
+                alignItems: 'center',
                 paddingTop: 0,
                 paddingBottom: 0,
                 paddingRight: 0,
@@ -50,7 +51,7 @@ function App() {
             <Router>
                 {
                     initialization ? <CircularProgress size={120} /> :
-                    <Container>
+                    <Container className={classes.root}>
                         <Header/>
                         <Grid container className={classes.main} spacing={4}>
                             <Grid container xs={4} sm={3} md={2} item className={classes.navbar} spacing={0}>

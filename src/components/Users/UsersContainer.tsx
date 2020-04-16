@@ -15,16 +15,21 @@ const UsersContainer: React.FC = () => {
     const [users, setUsers] = useState<Array<TUser>>([])
 
     useEffect(() => {
-        if (!usersItems) {
-            dispatch(initialization())
-        } 
+        let isCancel = false
+        const fetchData = async () => {
+            if (!isCancel && !usersItems) {
+                await dispatch(initialization())
+            }
+            setLoading(false)
+        }
+        fetchData()
         usersItems && setUsers(usersItems)
-        setLoading(false)
+        return () => {isCancel = true}
     }, [usersItems, dispatch])
     
     
     return (
-        <Users loading={loadingState || loading} users={users} />
+        <Users loading={loading} users={users} />
     )
 }
 
