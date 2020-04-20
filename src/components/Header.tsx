@@ -1,12 +1,14 @@
 import React, {useState} from 'react'
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
-import {ExitToAppOutlined, LockOpen, ExpandMore} from '@material-ui/icons'
-import {AppBar, Toolbar, Typography, Button, Avatar, Menu, MenuItem} from '@material-ui/core'
-import {NavLink, Redirect} from 'react-router-dom'
-import {useSelector, useDispatch} from 'react-redux'
-import {isAuthSelector} from '../redux/selectors/authSelectors'
-import {ownerAvatar} from '../redux/selectors/profileSelectors'
-import {logout} from '../redux/authActions'
+import { NavLink, Redirect } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import { ExitToAppOutlined, LockOpen, ExpandMore } from '@material-ui/icons'
+import { AppBar, Toolbar, Typography, Button, Avatar, Menu, MenuItem } from '@material-ui/core'
+
+import { isAuthSelector } from '../redux/selectors/authSelectors'
+import { avatarOwnerSmall } from '../redux/selectors/profileSelectors'
+import { logout } from '../redux/authActions'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -58,7 +60,7 @@ const Header: React.FC<TProps> = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const isAuth = useSelector(isAuthSelector)
-    const avatar = useSelector(ownerAvatar)
+    const avatar = useSelector(avatarOwnerSmall)
     const [isRedirect, setIsRedirect] = useState(false)
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -69,26 +71,23 @@ const Header: React.FC<TProps> = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const handleLogout = async () => {
-        const res = await dispatch(logout())
-        if (!res) {
-            setIsRedirect(true)
-        }
+    const handleLogout = () => {
+        dispatch(logout())
     }
     return (
         <AppBar position="static" className={classes.root}>
-            {isRedirect && <Redirect to='/login' />}
+            {/* {isRedirect && <Redirect to='/login' />} */}
             <Toolbar>
                 <Typography variant="h6" className={classes.title}>
                     Logo
                 </Typography>
 
                 {
-                    isAuth && avatar ?
+                    isAuth ?
                         <>
                             <div className={classes.avatar}>
                                 <Button disableRipple disableFocusRipple aria-controls="menu" aria-haspopup="true" onClick={handleClick}>
-                                    {avatar && <Avatar variant='circle' src={avatar} />}
+                                    {<Avatar variant='circle' src={avatar ? avatar : undefined} />}
                                     <ExpandMore />
                                 </Button>
                                 <Menu

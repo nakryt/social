@@ -1,12 +1,18 @@
 import React, { useEffect } from 'react'
-import {useSelector, useDispatch} from 'react-redux'
-import {RouteComponentProps, Redirect} from 'react-router-dom'
-import {List, Grid} from '@material-ui/core';
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
+import { useSelector, useDispatch } from 'react-redux'
+import { RouteComponentProps, Redirect } from 'react-router-dom'
 
-import {root as dialogsRootSelector, dialogs as dialogsSelector, messages as messagesSelector} from '../../redux/selectors/dialogsSelectors'
-import {isAuthSelector} from '../../redux/selectors/authSelectors'
-import actions, {getDialogs, getMessages, sendMessage} from '../../redux/dialogsActions'
+import { List, Grid } from '@material-ui/core';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+
+import { ResultCode } from '../../types/resultCodes'
+import {
+    root as dialogsRootSelector,
+    dialogs as dialogsSelector,
+    messages as messagesSelector,
+} from '../../redux/selectors/dialogsSelectors'
+import { isAuthSelector } from '../../redux/selectors/authSelectors'
+import { getDialogs, getMessages, sendMessage } from '../../redux/dialogsActions'
 
 import DialogItem from './DialogItem/DialogItem'
 import Messages from './Messages/Messages'
@@ -19,8 +25,12 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         dialogs: {
             flexDirection: 'column',
-            padding: theme.spacing(2),
-            paddingTop: theme.spacing(4),
+            padding: 0,
+            margin: 0,
+            '& li': {
+                margin: 0,
+                padding: 0
+            },
         },
         messages: {
             height: '62vh',
@@ -41,24 +51,25 @@ const Dialogs: React.SFC<TProps & RouteComponentProps<{ id: string }>> = ({match
     const dialogs = useSelector(dialogsSelector)
     const dialogsRoot = useSelector(dialogsRootSelector)
     const messages = useSelector(messagesSelector)
-    const selectedDialogId = match.params.id
-
-    useEffect(() => {
-        // dispatch(setActiveDialog(selectedDialogId))
-    }, [selectedDialogId, dispatch]);
+    
     useEffect(() => {
         let isCancel = false
         const fetchData = async () => {
             if (!isCancel) {
-                await dispatch(getDialogs())
+                dispatch(getDialogs())
             }
         }
         fetchData()
-        return () => {isCancel = true}
+        
+        return () => { isCancel = true }
     }, [dispatch])
 
-    const sendHandler = (value: string) => {
-        dialogsRoot.selectedDialog && dispatch(sendMessage(dialogsRoot.selectedDialog, value))
+    const sendHandler = async (value: string) => {
+        if (dialogsRoot.selectedDialog) {
+            await dispatch(sendMessage(dialogsRoot.selectedDialog, value))
+            return ResultCode.Success
+        }
+        return ResultCode.Error
     }
     return (
         <Grid container>
@@ -67,15 +78,16 @@ const Dialogs: React.SFC<TProps & RouteComponentProps<{ id: string }>> = ({match
                 <Grid item sm={4}>
                     <List className={classes.dialogs}>
                         {
-                            dialogs.map(({id, userName}) =>
+                            dialogs.map(({id, userName, photos:{small}, newMessagesCount}) =>
                                 <DialogItem
                                     key={id}
-                                    id={id}
                                     name={userName}
+                                    avatar={small}
                                     onClick={() => {
                                         dispatch(getMessages(id))
-                                        dispatch(actions.setActiveDialog(id))
                                     }}
+                                    newMessagesCount={newMessagesCount}
+                                    selected={dialogsRoot.selectedDialog === id}
                                 />)
                         }
                     </List>

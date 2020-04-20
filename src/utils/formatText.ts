@@ -17,6 +17,10 @@ type TObj = {
 const changeEmptyValues = (obj: TObj) => {
     let outAcc: TObj = {}
     return Object.entries(obj).reduce((acc, [key, value]) => {
+        if (key === 'photos') {
+            acc[key] = value
+            return acc
+        }
         if (value instanceof Object) {
             acc[key] = changeEmptyValues(value as TObj)
             return acc
@@ -31,8 +35,22 @@ const changeEmptyValues = (obj: TObj) => {
     }, outAcc)
 }
 
+const twoDigit = (num: number | string): string => {
+    if (+num / 10 < 1) {
+      return `0${num}`
+    }
+    return String(num)
+  }
+  
+
+const unshielding = (str: string): string => str.replace(/&#39;/g, "'")
+const shielding = (str: string): string => str.replace(/'/g, "'")
+
 export default {
     firstLetterUpperCase,
     changeCamelString,
-    changeEmptyValues
+    twoDigit,
+    changeEmptyValues,
+    shielding,
+    unshielding
 }

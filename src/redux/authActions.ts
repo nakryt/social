@@ -1,10 +1,11 @@
 import {ThunkAction} from 'redux-thunk'
-import {TStore} from './store'
+import { TStore } from './store'
 import authAPI from '../api/authAPI'
-import {getProfile} from './profileActions'
+import { getProfile, setProfileInfo, setProfilePhoto } from './profileActions'
+import { defaultProfile } from './profileReducer'
 import { ResultCode, ResultCodeForCaptcha } from '../types/resultCodes'
-import {PropsType, Nullable} from '../types/app'
-import {ProfileType} from '../types/profile'
+import { ActionTypes, Nullable } from '../types/app'
+import { ProfileType } from '../types/profile'
 
 export const SET_IS_AUTH = 'AUTH/SET_IS_AUTH'
 export const SET_USER_DATA = 'AUTH/SET_USER_DATA'
@@ -17,7 +18,7 @@ type TUserData = {
     isAuth: boolean
 }
 
-export type TAuthActions = ReturnType<PropsType<typeof actions>>
+export type TAuthActions = ActionTypes<typeof actions>
 export type TThunkResult<R> = ThunkAction<R, TStore, null, TAuthActions>
 
 const actions = {
@@ -66,10 +67,13 @@ export const logout = ():TThunkResult<Promise<number>> => async (dispatch) => {
         const response = await authAPI.logout()
         if (response.resultCode === ResultCode.Success) {
             dispatch(actions.setUserData(null, null, null, false))
+            dispatch(setProfileInfo(defaultProfile))
+            dispatch(setProfilePhoto(null))
             return ResultCode.Success
         }
         return ResultCode.Error
     } catch (e) {
+        console.log(e)
         return ResultCode.Error
     }
 }

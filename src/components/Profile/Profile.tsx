@@ -1,15 +1,16 @@
-import React, {useEffect, useState} from 'react'
-import {RouteComponentProps, Redirect} from 'react-router-dom'
-import {CircularProgress} from '@material-ui/core'
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
-import {useSelector, useDispatch} from 'react-redux'
-import {postsSelector} from '../../redux/selectors/profileSelectors'
-import actions from '../../redux/profileActions'
-import {userIdSelector} from '../../redux/selectors/authSelectors'
-import {getProfile, getStatus} from '../../redux/profileActions'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { RouteComponentProps, Redirect } from 'react-router-dom'
+
+import { CircularProgress } from '@material-ui/core'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+
+import { postsSelector, loadingData } from '../../redux/selectors/profileSelectors'
+import { userIdSelector } from '../../redux/selectors/authSelectors'
+import { getProfile, addPost } from '../../redux/profileActions'
 
 import mainPicture from './main.jpg'
-import UserInfo from './UserInfo/UserInfo/UserInfo'
+import UserInfo from './UserInfo/UserInfo'
 import Posts from './Posts/Posts'
 import TextFieldWithButton from '../UI/TextFieldWithButton'
 
@@ -41,31 +42,29 @@ interface MatchProps {
 }
 
 const Profile: React.FC<RouteComponentProps<MatchProps>> = ({match: {params}}) => {
-    
     const classes = useStyles()
     const dispatch = useDispatch()
+    const loading = useSelector(loadingData)
     const id = useSelector(userIdSelector)
     const userId = Number(params.id) || id 
     const posts = useSelector(postsSelector)
-    const [loading, setLoading] = useState(true)
-    const addPostHandler = (value: string) => {
-        dispatch(actions.addPost(value))
+    const addPostHandler = async (value: string) => {
+        return await dispatch(addPost(value))
     }
 
     useEffect(() => {
         let isCancel = false
-        const fetchData = async () => {
+        const fetchData = () => {
             if (!isCancel && userId) {
-                await dispatch(getProfile(userId))
-                await dispatch(getStatus(userId))
+                dispatch(getProfile(userId))
             }        
-            setLoading(false)
         }
         fetchData()
-        
-        return () => {isCancel = true}
+        return () => {
+            isCancel = true
+        }
 
-    }, [dispatch, userId, setLoading])
+    }, [dispatch, userId])
 
     return (
         <div>

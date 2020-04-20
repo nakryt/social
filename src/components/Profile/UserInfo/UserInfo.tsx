@@ -1,21 +1,36 @@
-import React, {useState} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
-import {userProfile, status, loadingData} from '../../../../redux/selectors/profileSelectors'
-import {isOwner as isOwnerSelector} from '../../../../redux/selectors/authSelectors'
-import {setStatus, setProfileInfo} from '../../../../redux/profileActions'
+import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { userProfile, status, loadingData } from '../../../redux/selectors/profileSelectors'
+import { isOwner as isOwnerSelector } from '../../../redux/selectors/authSelectors'
+import { setStatus, setProfileInfo } from '../../../redux/profileActions'
 
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
-import {Collapse, Button} from '@material-ui/core'
-import {CheckCircleOutline, NotInterestedOutlined, ChevronRight, ExpandMore} from '@material-ui/icons'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import { Collapse, Button } from '@material-ui/core'
+import { CheckCircleOutline, NotInterestedOutlined, ChevronRight, ExpandMore } from '@material-ui/icons'
 
-import UserAvatar from '../UserAvatar'
-import InputWithEditC from '../../../UI/InputWithEditOnClick'
+import UserAvatar from './UserAvatar'
+import InputWithEditC from '../../UI/InputWithEditOnClick'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             display: 'flex',
             marginBottom: theme.spacing(2),
+        },
+        avatarWrap: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+        },
+        buttonsWrap: {
+            display: 'flex',
+            flexDirection: 'column',
+            marginLeft: 24,
+            '& button': {
+                minWidth: 0,
+                padding: '2px 8px',
+                marginTop: theme.spacing(1)
+            }
         },
         info: {
             display: 'flex',
@@ -107,8 +122,17 @@ const UserInfo:React.FC = () => {
     
     return (
         <div className={classes.root}>
-            <UserAvatar />
 
+            <div className={classes.avatarWrap}>
+                <UserAvatar />
+                {
+                    !isOwner &&
+                        <div className={classes.buttonsWrap}>
+                            <Button variant='contained' color='primary'>follow</Button>
+                            <Button variant='contained' color='primary'>send message</Button>
+                        </div>
+                }
+            </div>
             <div className={classes.info}>
                 <p className={classes.status}>
                     <InputWithEditC

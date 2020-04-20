@@ -1,7 +1,11 @@
 import React from 'react'
-import { List, ListItem } from '@material-ui/core'
-import {NavLink} from 'react-router-dom'
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
+import { NavLink } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+
+import { List, ListItem, Badge } from '@material-ui/core'
+import { makeStyles, createStyles, Theme, withStyles } from '@material-ui/core/styles'
+
+import { newMessages as newMessagesSelector } from '../redux/selectors/dialogsSelectors'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -9,7 +13,6 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
         },
         list: {
-            // padding: theme.spacing(2),
             paddingTop: theme.spacing(4),
         },
         link: {
@@ -25,6 +28,19 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
+
+const StyledBadge = withStyles((theme: Theme) =>
+    createStyles({
+        badge: {
+            right: -15,
+            top: 10,
+            border: `2px solid ${theme.palette.background.paper}`,
+            padding: '0 4px',
+        },
+    }),
+)(Badge)
+
+
 type TProps = {}
 const template = [
     {id: 1, to: '/profile', label: 'profile'},
@@ -35,6 +51,7 @@ const template = [
 ]
 const Navbar: React.FC<TProps> = () => {
     const classes = useStyles()
+    const newMessages = useSelector(newMessagesSelector)
     return (
         <nav>
             <List className={classes.list} aria-label="main-navbar">
@@ -45,7 +62,16 @@ const Navbar: React.FC<TProps> = () => {
                                 className={classes.link}
                                 activeClassName={classes.activeLink}
                                 to={to}
-                            >{`${label[0].toUpperCase()}${label.slice(1)}`}</NavLink>
+                            >
+                                {
+                                    label === 'messages' ?
+                                        <StyledBadge badgeContent={newMessages} color="secondary" max={100} >
+                                            {`${label[0].toUpperCase()}${label.slice(1)}`}
+                                        </StyledBadge> :
+                                        `${label[0].toUpperCase()}${label.slice(1)}`
+                                }
+                                
+                            </NavLink>
                         </ListItem>
                     )
                 }

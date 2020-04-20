@@ -80,7 +80,7 @@ const Login: React.FC<TProps> = () => {
                 setError(res)
             }
         } else {
-            // console.log('SignUp:', data)
+            console.log('SignUp:', email, password)
         }
     }
 

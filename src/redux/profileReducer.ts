@@ -1,8 +1,7 @@
-import {SET_PROFILE, SET_STATUS, ADD_POST, CHANGE_POST, TProfileActions, DELETE_POST, LOADING_DATA} from './profileActions'
-import {TProfile, TPosts} from '../types/profile'
-import {ProfileType} from '../types/profile'
+import {SET_PROFILE, SET_STATUS, ADD_POST, CHANGE_POST, TProfileActions, DELETE_POST, SET_PHOTO, LOADING_DATA} from './profileActions'
+import {TProfile, TPosts, ProfileType} from '../types/profile'
 
-const initialProfile = {
+export const defaultProfile = {
     userId: null,
     aboutMe: null,
     lookingForAJob: null,
@@ -26,8 +25,8 @@ const initialProfile = {
 
 const initialState = {
     loading: false,
-    userProfile: initialProfile,
-    ownerProfile: initialProfile,
+    userProfile: defaultProfile,
+    ownerProfile: defaultProfile,
     status: null as null | string,
     posts: [
         {id: '1', text: 'Life is beautiful', likes: 3},
@@ -51,6 +50,17 @@ const profileReducer = (state = initialState, action: TProfileActions): TProfile
             return {
                 ...state,
                 status: action.payload
+            }
+        case SET_PHOTO: 
+            return {
+                ...state,
+                // ownerProfile: {
+                //     ...state.ownerProfile,
+                //     photos: {
+                //         large: action.payload,
+                //         small: action.payload
+                //     }
+                // },
             }
         case ADD_POST:
             const newPost = { id: Number(new Date()).toString(), text: action.payload, likes: 0 }

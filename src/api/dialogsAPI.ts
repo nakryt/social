@@ -1,5 +1,5 @@
 import instance from './instance'
-import {TDialogs, TMessages} from '../types/dialogs'
+import {TDialogs, TMessage, TMessages} from '../types/dialogs'
 
 const getAllDialogs = async () => {
     try {
@@ -10,43 +10,16 @@ const getAllDialogs = async () => {
     }
 }
 
-// const getDialog = async (userId: number) => {
-//     try {
-//         const response = (await instance.get(`dialogs/${userId}`))
-//         debugger 
-//         return response
-//     } catch (e) {
-
-// //     }
-// // }
-
-// enum Method {
-//     post = 'post',
-//     get = 'get',
-//     delete = 'delete',
-//     put = 'put'
-// }
-
-
-// const withTryCatch = async (method:Method, url: string, data: object) => {
-//     try {
-//         const response = await instance[method](url, data)
-//         debugger
-//         return response.data
-//     } catch (e) {
-
-//     }
-    
-// }
-
+type TSendMessageResponse = {
+    data: {message: TMessage}
+    messages: Array<string>
+    resultCode: number
+}
 const sendMessage = async (userId: number, text: string) => {
     try {
-        // const res = await instance.put(`dialogs/${userId}`)
-        const response = (await instance.post(`dialogs/${userId}/messages`, {body: text}))
-        debugger
-        return response.data
+        const response:TSendMessageResponse = (await instance.post(`dialogs/${userId}/messages`, {body: text})).data
+        return response
     } catch (e) {
-        debugger
         console.log(e.message)
     }
 }

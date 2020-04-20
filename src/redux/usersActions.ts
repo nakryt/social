@@ -1,9 +1,9 @@
-import {ThunkAction} from 'redux-thunk'
-import {TUser} from '../types/users'
-import {TStore} from './store'
+import { ThunkAction } from 'redux-thunk'
+import { TUser } from '../types/users'
+import { TStore } from './store'
 import usersAPI from '../api/usersAPI'
-import {PropsType} from '../types/app'
-import {ResultCode} from '../types/resultCodes'
+import { ActionTypes } from '../types/app'
+import { ResultCode } from '../types/resultCodes'
 
 export const LOADING_DATA = 'USERS/LOADING_DATA'
 export const SET_USERS = 'USERS/SET_USERS'
@@ -26,7 +26,7 @@ const actions = {
                             type: SET_FOLLOWING_IN_PROGRESS, payload: { userId, type }
                         } as const)
 }
-export type TUsersActions = ReturnType<PropsType<typeof actions>>
+export type TUsersActions = ActionTypes<typeof actions>
 type TThunkResult<R> = ThunkAction<R, TStore, null, TUsersActions>
 
 

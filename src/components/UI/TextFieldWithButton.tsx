@@ -1,6 +1,8 @@
-import React, {useState} from 'react'
-import {Button, OutlinedInput, Grid} from '@material-ui/core'
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
+import React, { useState } from 'react'
+import { Button, OutlinedInput, Grid } from '@material-ui/core'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+
+import { ResultCode } from '../../types/resultCodes'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 type TProps = {
-    onClick: (value: string) => void
+    onClick: (value: string) => Promise<ResultCode>
     buttonName: string
 }
 
@@ -36,10 +38,10 @@ const TextFieldWithButton: React.FC<TProps> = ({ onClick, buttonName }) => {
     const changeHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value)
     }
-    const onClickHandler = () => {
+    const onClickHandler = async () => {
         if (value.length) {
-            onClick(value)
-            setValue('')
+            const res = await onClick(value)            
+            res === ResultCode.Success && setValue('')
         }
     }
     return (
