@@ -96,7 +96,6 @@ const Header: React.FC<TProps> = () => {
                                     open={Boolean(anchorEl)}
                                     onClose={handleClose}
                                 >
-                                    <MenuItem onClick={handleClose}>Settings</MenuItem>
                                     <MenuItem onClick={() => {
                                             handleClose()
                                             handleLogout()

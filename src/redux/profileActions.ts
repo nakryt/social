@@ -76,14 +76,12 @@ export const getProfileInfo = (userId: number): TThunkResult<Promise<TProfile>> 
 export const setProfileInfo = (data: TProfile = defaultProfile): TThunkResult<Promise<void>> => async (dispatch, getState) => {
     try {
         const isAuth = getState().auth.isAuth
-        dispatch(actions.setLoadingData(true))
         if (isAuth) {
             const res = await profileAPI.setProfileInfo(data)
             if (res === ResultCode.Success) {
                 dispatch(updateProfileInfo())
             }
         }
-        dispatch(actions.setLoadingData(false))
     } catch (e) {
 
     }

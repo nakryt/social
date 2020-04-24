@@ -14,7 +14,7 @@ import {
 
 const initialState = {
     loading: false,
-    items: null as null | Array<TUser>,
+    items: [] as Array<TUser>,
     pageNumber: 1,
     pageSize: 8,
     totalCount: 0,

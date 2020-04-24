@@ -1,13 +1,11 @@
 import React from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
 import Profile from './Profile/Profile'
-import Dialogs from './Dialogs/Dialogs'
+import Dialogs from './Dialogs/DialogsContainer'
 import Login from './Login'
 import Users from './Users/UsersContainer'
 
-type TProps = {}
-
-const Main: React.FC<TProps> = () => {
+const Main: React.FC = () => {
     return (
         <Switch>
             <Route path='/profile/:id?' component={Profile} />

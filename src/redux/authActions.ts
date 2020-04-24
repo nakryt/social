@@ -1,7 +1,8 @@
-import {ThunkAction} from 'redux-thunk'
+import { ThunkAction } from 'redux-thunk'
 import { TStore } from './store'
 import authAPI from '../api/authAPI'
 import { getProfile, setProfileInfo, setProfilePhoto } from './profileActions'
+import { unmount as unmountDialogs } from './dialogsActions'
 import { defaultProfile } from './profileReducer'
 import { ResultCode, ResultCodeForCaptcha } from '../types/resultCodes'
 import { ActionTypes, Nullable } from '../types/app'
@@ -69,6 +70,7 @@ export const logout = ():TThunkResult<Promise<number>> => async (dispatch) => {
             dispatch(actions.setUserData(null, null, null, false))
             dispatch(setProfileInfo(defaultProfile))
             dispatch(setProfilePhoto(null))
+            dispatch(unmountDialogs())
             return ResultCode.Success
         }
         return ResultCode.Error

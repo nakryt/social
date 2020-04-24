@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import { Collapse, Button } from '@material-ui/core'
-import { CheckCircleOutline, NotInterestedOutlined, ChevronRight, ExpandMore } from '@material-ui/icons'
+import { Button } from '@material-ui/core'
+import { CheckCircleOutline, NotInterestedOutlined } from '@material-ui/icons'
 
 import { userProfile, status, loadingData, isFollow as followSelector } from '../../../redux/selectors/profileSelectors'
 import { followingInProgress } from '../../../redux/selectors/usersSelectors'
@@ -13,6 +13,7 @@ import { setFollowing } from '../../../redux/usersActions'
 
 import UserAvatar from './UserAvatar'
 import InputWithEditC from '../../UI/InputWithEditOnClick'
+import Contacts from './Contacts'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -78,25 +79,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 minWidth: 24,
                 padding: 0
             }
-        },
-        contactsWrap: {
-            display: 'flex',
-            flexDirection: 'column',
-            paddingLeft: theme.spacing(1)
-        },
-        contacts: {
-            display: 'flex',
-            alignItems: 'center',
-            cursor: 'pointer'
-        },
-        contactItem: {
-            display: 'flex',
-            alignItems: 'center',
-            minHeight: 25,
-            paddingLeft: theme.spacing(4),
-            '& input': {
-                marginBottom: 0
-            }
         }
     })
 )
@@ -112,7 +94,6 @@ const UserInfo:React.FC = () => {
     const followingProgress = useSelector(followingInProgress)
     const userStatus = useSelector(status)
     
-    const [openContacts, setOpenContacts] = useState(false)
     const { userId, fullName, aboutMe, lookingForAJobDescription, contacts } = profile
     const saveStatusHandler = (status: string) => {
         dispatch(setStatus(status))
@@ -213,34 +194,7 @@ const UserInfo:React.FC = () => {
                         />
                     </p>
                     
-                    <div className={classes.contactsWrap}>
-                        <strong className={classes.contacts}
-                            onClick={() => setOpenContacts(!openContacts)}
-                        >
-                            {openContacts ? <ExpandMore /> : <ChevronRight />}
-                            Contacts: {!openContacts && '...'}    
-                        </strong>
-    
-                        <Collapse in={openContacts}>
-                            <>
-                                {
-                                    Object.entries(profile.contacts).map(([title, value], index) => {
-                                        return (
-                                            <div key={index} className={classes.contactItem}>
-                                                <strong>{title}:&nbsp;</strong>
-                                                <InputWithEditC
-                                                    inputName={title}
-                                                    onSave={saveInfoContactsHandler}
-                                                    text={value}
-                                                    canEdit={isOwner}
-                                                />
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </>  
-                        </Collapse>
-                    </div>
+                    <Contacts isOwner={isOwner} contacts={profile.contacts} saveHandler={saveInfoContactsHandler} />
                     
                 </div>
             </div>
@@ -250,3 +204,4 @@ const UserInfo:React.FC = () => {
 }
 
 export default UserInfo
+

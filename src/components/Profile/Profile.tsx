@@ -9,6 +9,7 @@ import { ResultCode } from '../../types/resultCodes'
 import { postsSelector, loadingData } from '../../redux/selectors/profileSelectors'
 import { userIdSelector } from '../../redux/selectors/authSelectors'
 import { getProfile, addPost } from '../../redux/profileActions'
+import { getDialogs } from '../../redux/dialogsActions'
 
 import mainPicture from './main.jpg'
 import UserInfo from './UserInfo/UserInfo'
@@ -47,7 +48,7 @@ const Profile: React.FC<RouteComponentProps<MatchProps>> = ({match: {params}}) =
     const dispatch = useDispatch()
     const loading = useSelector(loadingData)
     const id = useSelector(userIdSelector)
-    const userId = Number(params.id) || id 
+    const userId = parseInt(params.id) || id 
     const posts = useSelector(postsSelector)
     const addPostHandler = (value: string) => {
         dispatch(addPost(value))
@@ -60,6 +61,7 @@ const Profile: React.FC<RouteComponentProps<MatchProps>> = ({match: {params}}) =
         const fetchData = () => {
             if (!isCancel && userId) {
                 dispatch(getProfile(userId))
+                userId === id && dispatch(getDialogs())
             }        
         }
         fetchData()
@@ -67,7 +69,7 @@ const Profile: React.FC<RouteComponentProps<MatchProps>> = ({match: {params}}) =
             isCancel = true
         }
 
-    }, [dispatch, userId])
+    }, [dispatch, userId, id])
 
     return (
         <div>

@@ -1,3 +1,5 @@
+import { TProfile } from './profile'
+
 export type TMessage = {
     addedAt: string
     body: string
@@ -13,6 +15,7 @@ export type TMessages = Array<TMessage>
 export type TDialog = {
     hasNewMessages: boolean
     id: number
+    profile: TProfile
     lastDialogActivityDate: string
     lastUserActivityDate: string
     newMessagesCount: number

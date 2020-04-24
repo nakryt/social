@@ -24,18 +24,14 @@ class UsersContainer extends Component<TProps, TState> {
     state = {
         users: [] as Array<TUser>
     }
-    componentWillMount() {
+    componentDidMount() {
         if (!this.state.users.length) {
             this.props.initialization()
         }
     }
     componentDidUpdate(prevProps: TProps, prevState: TState) {
         if (prevProps.usersItems !== this.props.usersItems && this.props.usersItems?.length) {
-            
-            // @ts-ignore
-            this.setState((state) => {
-                return {users: this.props.usersItems}
-            })
+            this.setState({users: this.props.usersItems})
         }
     }
     componentWillUnmount() {

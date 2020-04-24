@@ -2,6 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
+import formatText from '../utils/formatText'
 import { List, ListItem, Badge } from '@material-ui/core'
 import { makeStyles, createStyles, Theme, withStyles } from '@material-ui/core/styles'
 
@@ -20,35 +21,29 @@ const useStyles = makeStyles((theme: Theme) =>
             textDecoration: 'none',
             color: '#fff',
             fontSize: '1.1rem',
-            letterSpacing: 1
+            letterSpacing: 1,
         },
         activeLink: {
             color: 'yellow'
+        },
+        messageLabel: {
+            display: 'flex',
+            alignItems: 'center'
+        },
+        newMessagesNumber: {
+            fontSize: '0.8rem'
         }
     }),
 )
 
 
-const StyledBadge = withStyles((theme: Theme) =>
-    createStyles({
-        badge: {
-            right: -15,
-            top: 10,
-            border: `2px solid ${theme.palette.background.paper}`,
-            padding: '0 4px',
-        },
-    }),
-)(Badge)
-
-
-type TProps = {}
 const template = [
     {id: 1, to: '/profile', label: 'profile'},
     {id: 2, to: '/messages', label: 'messages'},
     {id: 3, to: '/music', label: 'music'},
     {id: 4, to: '/users', label: 'users'},
 ]
-const Navbar: React.FC<TProps> = () => {
+const Navbar: React.FC = () => {
     const classes = useStyles()
     const newMessages = useSelector(newMessagesSelector)
     return (
@@ -63,11 +58,14 @@ const Navbar: React.FC<TProps> = () => {
                                 to={to}
                             >
                                 {
-                                    label === 'messages' ?
-                                        <StyledBadge badgeContent={newMessages} color="secondary" max={100} >
-                                            {`${label[0].toUpperCase()}${label.slice(1)}`}
-                                        </StyledBadge> :
-                                        `${label[0].toUpperCase()}${label.slice(1)}`
+                                    label === 'messages'
+                                        ?
+                                            <span className={classes.messageLabel}>
+                                                {formatText.firstLetterUpperCase(label)}&nbsp;
+                                                {newMessages ? <span className={classes.newMessagesNumber}>{`+${newMessages}`}</span> : ''}
+                                            </span>
+                                        :
+                                            <span>{formatText.firstLetterUpperCase(label)}</span>
                                 }
                                 
                             </NavLink>
@@ -79,4 +77,4 @@ const Navbar: React.FC<TProps> = () => {
     )
 };
 
-export default Navbar;
+export default Navbar

@@ -1,5 +1,6 @@
 import {
     TDialogsActions,
+    SET_PROFILE,
     SET_DIALOGS,
     SET_ACTIVE_DIALOG,
     ADD_MESSAGE, SET_MESSAGES,
@@ -24,6 +25,16 @@ const dialogsReducer = (state = initialState, action: TDialogsActions): TDialogs
     switch (action.type) {
         case SET_DIALOGS:
             return {...state, data: action.payload}
+        case SET_PROFILE:
+            return {
+                ...state,
+                data: state.data.map(item => {
+                    if (item.id === action.payload.id) {
+                        return { ...item, profile: action.payload.profile }
+                    }
+                    return item
+                })
+            }
         case SET_ACTIVE_DIALOG:
             return {...state, selectedDialog: action.payload}
         case SET_MESSAGES:
