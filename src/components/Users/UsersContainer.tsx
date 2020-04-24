@@ -1,35 +1,61 @@
-import React, {useEffect, useState} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
+import React, { Component  } from 'react'
+import { connect } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { TUsersActions } from '../../redux/usersActions'
 
-import {TUser} from '../../types/users'
-import {usersItems as usersItemsSelector} from '../../redux/selectors/usersSelectors'
-import {initialization} from '../../redux/usersActions'
+import { TStore } from '../../redux/store'
+import { TUser } from '../../types/users'
+import { usersItems as usersItemsSelector, loading as loadingSelector } from '../../redux/selectors/usersSelectors'
+import { initialization, unmount } from '../../redux/usersActions'
 
 import Users from './Users'
 
-const UsersContainer: React.FC = () => {
-    const dispatch = useDispatch()
-    const usersItems = useSelector(usersItemsSelector)
-    const [loading, setLoading] = useState(true)
-    const [users, setUsers] = useState<Array<TUser>>([])
-
-    useEffect(() => {
-        let isCancel = false
-        const fetchData = async () => {
-            if (!isCancel && !usersItems) {
-                await dispatch(initialization())
-            }
-            setLoading(false)
-        }
-        fetchData()
-        usersItems && setUsers(usersItems)
-        return () => {isCancel = true}
-    }, [usersItems, dispatch])
-    
-    
-    return (
-        <Users loading={loading} users={users} />
-    )
+type TProps = {
+    loading: boolean
+    usersItems: Array<TUser> | null
+    initialization: () => void
+    unmount: () => void
+}
+type TState = {
+    users: Array<TUser>
 }
 
-export default UsersContainer
+class UsersContainer extends Component<TProps, TState> {
+    state = {
+        users: [] as Array<TUser>
+    }
+    componentWillMount() {
+        if (!this.state.users.length) {
+            this.props.initialization()
+        }
+    }
+    componentDidUpdate(prevProps: TProps, prevState: TState) {
+        if (prevProps.usersItems !== this.props.usersItems && this.props.usersItems?.length) {
+            
+            // @ts-ignore
+            this.setState((state) => {
+                return {users: this.props.usersItems}
+            })
+        }
+    }
+    componentWillUnmount() {
+        this.props.unmount()
+    }
+
+    render() {
+        return (
+            <Users loading={this.props.loading} users={this.state.users} />
+        )
+    }
+    
+}
+const mstp = (state: TStore) => ({
+    loading: loadingSelector(state),
+    usersItems: usersItemsSelector(state)
+})
+const mdtp = (dispatch: ThunkDispatch<TStore, null, TUsersActions>) => ({
+    initialization: () => dispatch(initialization()),
+    unmount: () => dispatch(unmount())
+})
+
+export default connect(mstp, mdtp)(UsersContainer)

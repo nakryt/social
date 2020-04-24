@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import formatText from '../../../utils/formatText'
 
 import { TMessages } from '../../../types/dialogs'
@@ -25,7 +25,6 @@ type TProps = {
 
 const Messages: React.FC<TProps> = ({ messages = [] }) => {
     const classes = useStyles()
-    const dispatch = useDispatch()
     const ownerId = useSelector(userIdSelector)
 
     const sortMessages = messages.slice().sort((a,b) => b.addedAt > a.addedAt ? 1 : -1)

@@ -5,6 +5,7 @@ import { RouteComponentProps, Redirect } from 'react-router-dom'
 import { CircularProgress } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
+import { ResultCode } from '../../types/resultCodes'
 import { postsSelector, loadingData } from '../../redux/selectors/profileSelectors'
 import { userIdSelector } from '../../redux/selectors/authSelectors'
 import { getProfile, addPost } from '../../redux/profileActions'
@@ -48,9 +49,11 @@ const Profile: React.FC<RouteComponentProps<MatchProps>> = ({match: {params}}) =
     const id = useSelector(userIdSelector)
     const userId = Number(params.id) || id 
     const posts = useSelector(postsSelector)
-    const addPostHandler = async (value: string) => {
-        return await dispatch(addPost(value))
+    const addPostHandler = (value: string) => {
+        dispatch(addPost(value))
+        return ResultCode.Success
     }
+    
 
     useEffect(() => {
         let isCancel = false
@@ -73,7 +76,7 @@ const Profile: React.FC<RouteComponentProps<MatchProps>> = ({match: {params}}) =
                 loading ? <CircularProgress size={120} /> :
                     <>
                         <div className={classes.imgWrapper}>
-                            <img className={classes.backPicture} src={mainPicture} alt="back"/>
+                            <img className={classes.backPicture} src={mainPicture} alt="main"/>
                         </div>
                         <UserInfo />
                         <Posts posts={posts}/>

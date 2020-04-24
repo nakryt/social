@@ -16,6 +16,7 @@ export const SET_PROFILE = 'PROFILE/SET_PROFILE'
 export const SET_STATUS = 'PROFILE/SET_STATUS'
 export const SET_PHOTO = 'PROFILE/SET_PHOTO'
 export const LOADING_DATA = 'PROFILE/LOAD_DATA'
+export const SET_IS_FOLLOW = 'PROFILE/SET_IS_FOLLOW'
 
 const actions = {
     addPost: (text: string) => ({ type: ADD_POST, payload: text } as const),
@@ -25,7 +26,8 @@ const actions = {
                         ({ type: SET_PROFILE, payload: {profile, typeProfile} } as const),
     setStatusToState: (status: string | null) => ({ type: SET_STATUS, payload: status } as const),
     setPhoto: (photo: File | null) => ({ type: SET_PHOTO, payload: photo } as const),
-    setLoadingData: (value: boolean) => ({type: LOADING_DATA, payload: value} as const)
+    setLoadingData: (value: boolean) => ({ type: LOADING_DATA, payload: value } as const),
+    setIsFollow: (value: boolean) => ({ type: SET_IS_FOLLOW, payload: value } as const)
 }
 
 export type TProfileActions = ActionTypes<typeof actions>
@@ -41,6 +43,7 @@ export const getProfile = (userId: number, typeProfile: TProfileType = ProfileTy
             const res = await dispatch(getProfileInfo(userId))
             typeof res !== 'string' &&
                 dispatch(actions.setProfile( utils.changeEmptyValues(res) as TProfile, typeProfile ))
+            dispatch(getIsFollow(userId))
         }
     }
     await dispatch(getStatus(userId))
@@ -77,7 +80,6 @@ export const setProfileInfo = (data: TProfile = defaultProfile): TThunkResult<Pr
         if (isAuth) {
             const res = await profileAPI.setProfileInfo(data)
             if (res === ResultCode.Success) {
-                // dispatch(actions.setProfile(data, ProfileType.Owner))
                 dispatch(updateProfileInfo())
             }
         }
@@ -119,9 +121,17 @@ export const setStatus = (status: string):TThunkResult<Promise<void>> => async (
     }
 }
 
-export const addPost = (text: string):TThunkResult<Promise<ResultCode>> => async (dispatch) => {
-    await dispatch(actions.addPost(text))
+export const addPost = (text: string):TThunkResult<ResultCode> => (dispatch) => {
+    dispatch(actions.addPost(text))
     return ResultCode.Success
+}
+export const getIsFollow = (userId: number): TThunkResult<Promise<void>> => async (dispatch) => {
+    try {
+        const res = await profileAPI.getIsFollow(userId)
+        typeof res === 'boolean' && dispatch(actions.setIsFollow(res))
+    } catch (e) {
+        console.log(e.message)
+    }
 }
 
 export default actions

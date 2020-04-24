@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 type TProps = {
-    onClick: (value: string) => Promise<ResultCode>
+    onClick: (value: string) => ResultCode
     buttonName: string
 }
 

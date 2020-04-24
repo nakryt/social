@@ -66,6 +66,13 @@ const setPhoto = async (photo: File | null): Promise<string | number | Error> =>
         return new Error(e.message)
     }
 }
+const getIsFollow = async (userId: number): Promise<boolean | Error> => {
+    try {
+        return (await instance.get(`follow/${userId}`)).data
+    } catch (e) {
+        return new Error(e.message)
+    }
+}
 
 
 export default {
@@ -73,5 +80,6 @@ export default {
     getStatus,
     setStatus,
     setProfileInfo,
-    setPhoto
+    setPhoto,
+    getIsFollow
 }

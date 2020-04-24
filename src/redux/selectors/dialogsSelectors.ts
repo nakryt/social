@@ -1,5 +1,4 @@
 import {TStore} from '../store'
-// import {T}
 import {TDialogsState} from '../dialogsReducer'
 import {createSelector} from 'reselect'
 
@@ -12,3 +11,5 @@ export const dialogAvatar = createSelector(dialogs, selectedDialog, (dlg, selDlg
 export const messages = createSelector(dialogs, selectedDialog, (dlg, selDlg) => 
             dlg.find(i => i.id === selDlg)?.messages)
 export const newMessages = createSelector(root, d => d.newMessages)
+export const loadingDialogs = createSelector(root, d => d.loadingDialogs)
+export const loadingMessages = createSelector(root, d => d.loadingMessages)

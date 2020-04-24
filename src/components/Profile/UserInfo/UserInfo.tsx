@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { userProfile, status, loadingData } from '../../../redux/selectors/profileSelectors'
-import { isOwner as isOwnerSelector } from '../../../redux/selectors/authSelectors'
-import { setStatus, setProfileInfo } from '../../../redux/profileActions'
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { Collapse, Button } from '@material-ui/core'
 import { CheckCircleOutline, NotInterestedOutlined, ChevronRight, ExpandMore } from '@material-ui/icons'
+
+import { userProfile, status, loadingData, isFollow as followSelector } from '../../../redux/selectors/profileSelectors'
+import { followingInProgress } from '../../../redux/selectors/usersSelectors'
+import { isOwner as isOwnerSelector } from '../../../redux/selectors/authSelectors'
+import { setStatus, setProfileInfo } from '../../../redux/profileActions'
+import { setFollowing } from '../../../redux/usersActions'
 
 import UserAvatar from './UserAvatar'
 import InputWithEditC from '../../UI/InputWithEditOnClick'
@@ -101,12 +104,16 @@ const useStyles = makeStyles((theme: Theme) =>
 const UserInfo:React.FC = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
+
     const profile = useSelector(userProfile)
     const loading = useSelector(loadingData)
     const isOwner = useSelector(isOwnerSelector)
+    const isFollow = useSelector(followSelector)
+    const followingProgress = useSelector(followingInProgress)
     const userStatus = useSelector(status)
+    
     const [openContacts, setOpenContacts] = useState(false)
-    const {fullName, aboutMe, lookingForAJobDescription, contacts} = profile
+    const { userId, fullName, aboutMe, lookingForAJobDescription, contacts } = profile
     const saveStatusHandler = (status: string) => {
         dispatch(setStatus(status))
     }
@@ -119,6 +126,9 @@ const UserInfo:React.FC = () => {
     const saveInfoContactsHandler = (value: string, inputName: string | null) => {
         inputName && dispatch(setProfileInfo({...profile, contacts: {...contacts, [inputName]: value} }))
     }
+    const followingHandler = () => {
+        userId && dispatch(setFollowing(userId))
+    }
     
     return (
         <div className={classes.root}>
@@ -128,7 +138,14 @@ const UserInfo:React.FC = () => {
                 {
                     !isOwner &&
                         <div className={classes.buttonsWrap}>
-                            <Button variant='contained' color='primary'>follow</Button>
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                onClick={followingHandler}
+                                disabled={followingProgress.some(i => i === userId)}
+                            >
+                                {isFollow ? 'unfollow' : 'follow'}
+                            </Button>
                             <Button variant='contained' color='primary'>send message</Button>
                         </div>
                 }

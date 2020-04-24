@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import { NavLink, Redirect } from 'react-router-dom'
+import React from 'react'
+import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
@@ -61,7 +61,6 @@ const Header: React.FC<TProps> = () => {
     const dispatch = useDispatch()
     const isAuth = useSelector(isAuthSelector)
     const avatar = useSelector(avatarOwnerSmall)
-    const [isRedirect, setIsRedirect] = useState(false)
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -76,7 +75,6 @@ const Header: React.FC<TProps> = () => {
     }
     return (
         <AppBar position="static" className={classes.root}>
-            {/* {isRedirect && <Redirect to='/login' />} */}
             <Toolbar>
                 <Typography variant="h6" className={classes.title}>
                     Logo

@@ -13,5 +13,6 @@ export const avatarUserSmall = createSelector(userProfile, p => p.photos.small)
 export const avatarUserLarge = createSelector(userProfile, p => p.photos.large)
 
 export const status = createSelector(profile, p => p.status)
+export const isFollow = createSelector(profile, p => p.isFollow)
 export const postsSelector = createSelector(profile, p => p.posts)
 export const loadingData = createSelector(profile, p => p.loading)

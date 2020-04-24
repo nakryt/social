@@ -3,6 +3,7 @@ import {
     TUsersActions,
     LOADING_DATA,
     SET_USERS,
+    ADD_USERS,
     SET_PAGE_NUMBER,
     SET_PAGE_SIZE,
     SET_TOTAL_COUNT,
@@ -31,6 +32,11 @@ const usersReducer = (state = initialState, action: TUsersActions): TUsersState 
                 loading: action.payload
             }
         case SET_USERS: 
+            return {
+                ...state,
+                items: action.payload
+            }
+        case ADD_USERS: 
             return {
                 ...state,
                 items: state.items ? [...state.items, ...action.payload] : action.payload

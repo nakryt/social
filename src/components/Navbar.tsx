@@ -45,9 +45,8 @@ type TProps = {}
 const template = [
     {id: 1, to: '/profile', label: 'profile'},
     {id: 2, to: '/messages', label: 'messages'},
-    {id: 3, to: '/news', label: 'news'},
-    {id: 4, to: '/music', label: 'music'},
-    {id: 5, to: '/users', label: 'users'},
+    {id: 3, to: '/music', label: 'music'},
+    {id: 4, to: '/users', label: 'users'},
 ]
 const Navbar: React.FC<TProps> = () => {
     const classes = useStyles()

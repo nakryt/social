@@ -95,7 +95,7 @@ const MessageItem: React.FC<TProps> = ({ text, addedAt, recipientId, ownerId, vi
                     <span className={classes.text}
                         style={{order: !recipient ? 1 : 0}} 
                     >{text}</span>
-                    <span className={`${classes.meta} ${recipient ? classes.timeRecipient : classes.timeSender}`}>
+                    <span className={classes.meta}>
                         <span className={classes.time}>
                             { `${hours}:${format.twoDigit(minutes)}`}
                         </span>

@@ -1,10 +1,12 @@
 import React from 'react'
-import {NavLink} from 'react-router-dom'
-import {useDispatch, useSelector} from 'react-redux'
-import {Card, Avatar, Button} from '@material-ui/core'
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles'
-import {setFollowing} from '../../redux/usersActions'
-import {followingInProgress} from '../../redux/selectors/usersSelectors'
+import { NavLink } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { Card, Avatar, Button } from '@material-ui/core'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+
+import { setFollowing } from '../../redux/usersActions'
+import { followingInProgress } from '../../redux/selectors/usersSelectors'
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -74,7 +76,7 @@ const UserItem:React.FC<TProps> = ({name, status, avatar, uniqueUrlName, followe
                         disabled={following.some(id => id === userId)}
                         onClick={() => {userId && followHandler(userId)}}
                     >
-                        {followed ? 'unfollowed' : 'followed'}
+                        {followed ? 'unfollow' : 'follow'}
                     </Button>
                 </div>
                 <div className={classes.info}>

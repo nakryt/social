@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         navbar: {
             backgroundColor: theme.palette.primary.main,
+            maxHeight: 600,
         }
     }),
 )

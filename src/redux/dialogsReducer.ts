@@ -3,16 +3,19 @@ import {
     SET_DIALOGS,
     SET_ACTIVE_DIALOG,
     ADD_MESSAGE, SET_MESSAGES,
-    SEND_MESSAGE,
     SET_NEW_MESSAGES,
-    RESET_NEW_MESSAGES
+    RESET_NEW_MESSAGES,
+    LOADING_DIALOGS,
+    LOADING_MESSAGES
 } from './dialogsActions'
 import {TDialogs} from '../types/dialogs'
 
 const initialState = {
     data: [] as TDialogs,
     newMessages: 0,
-    selectedDialog: null as null | number
+    selectedDialog: null as null | number,
+    loadingDialogs: false,
+    loadingMessages: false
 }
 
 export type TDialogsState = typeof initialState
@@ -62,8 +65,10 @@ const dialogsReducer = (state = initialState, action: TDialogsActions): TDialogs
                 newMessages: state.newMessages - newMessagesCount
                 
             }
-        case SEND_MESSAGE:
-            return state
+        case LOADING_DIALOGS:
+            return { ...state, loadingDialogs: action.payload }
+        case LOADING_MESSAGES:
+            return { ...state, loadingMessages: action.payload }
         default:
             return state
     }

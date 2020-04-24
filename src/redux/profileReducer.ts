@@ -1,4 +1,14 @@
-import {SET_PROFILE, SET_STATUS, ADD_POST, CHANGE_POST, TProfileActions, DELETE_POST, SET_PHOTO, LOADING_DATA} from './profileActions'
+import {
+    SET_PROFILE,
+    SET_STATUS,
+    ADD_POST,
+    CHANGE_POST,
+    TProfileActions,
+    DELETE_POST,
+    SET_PHOTO,
+    LOADING_DATA,
+    SET_IS_FOLLOW
+} from './profileActions'
 import {TProfile, TPosts, ProfileType} from '../types/profile'
 
 export const defaultProfile = {
@@ -32,7 +42,8 @@ const initialState = {
         {id: '1', text: 'Life is beautiful', likes: 3},
         {id: '2', text: 'Today we start a new life...', likes: 7},
         {id: '3', text: 'This will be a great moment', likes: 0},
-    ] as TPosts
+    ] as TPosts,
+    isFollow: false
 }
 
 export type TProfileState = typeof initialState
@@ -52,16 +63,7 @@ const profileReducer = (state = initialState, action: TProfileActions): TProfile
                 status: action.payload
             }
         case SET_PHOTO: 
-            return {
-                ...state,
-                // ownerProfile: {
-                //     ...state.ownerProfile,
-                //     photos: {
-                //         large: action.payload,
-                //         small: action.payload
-                //     }
-                // },
-            }
+            return { ...state }
         case ADD_POST:
             const newPost = { id: Number(new Date()).toString(), text: action.payload, likes: 0 }
             return {...state, posts: [newPost, ...state.posts]}
@@ -80,6 +82,8 @@ const profileReducer = (state = initialState, action: TProfileActions): TProfile
                 ...state,
                 posts: state.posts.filter(item => item.id !== action.payload)
             }
+        case SET_IS_FOLLOW:
+            return { ...state, isFollow: action.payload }
         case LOADING_DATA: 
             return {
                 ...state,
