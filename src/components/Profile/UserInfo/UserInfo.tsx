@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
@@ -10,10 +10,13 @@ import { followingInProgress } from '../../../redux/selectors/usersSelectors'
 import { isOwner as isOwnerSelector } from '../../../redux/selectors/authSelectors'
 import { setStatus, setProfileInfo } from '../../../redux/profileActions'
 import { setFollowing } from '../../../redux/usersActions'
+import { sendMessage } from '../../../redux/dialogsActions'
 
 import UserAvatar from './UserAvatar'
 import InputWithEditC from '../../UI/InputWithEditOnClick'
+import SendMessageModal from '../../UI/SendMessageModal'
 import Contacts from './Contacts'
+import { ResultCode } from '../../../types/resultCodes'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -22,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginBottom: theme.spacing(2),
         },
         avatarWrap: {
+            position: 'relative',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -110,6 +114,15 @@ const UserInfo:React.FC = () => {
     const followingHandler = () => {
         userId && dispatch(setFollowing(userId))
     }
+    const [showSendMessage, setShowSendMessage] = useState(false)
+    const sendMessageHandler = (userId: number, value: string) => {
+        const res = dispatch(sendMessage(userId, value))
+        debugger
+        return ResultCode.Success
+    }
+    const sendMessageClickHandler = () => {
+        setShowSendMessage(true)
+    }
     
     return (
         <div className={classes.root}>
@@ -127,8 +140,22 @@ const UserInfo:React.FC = () => {
                             >
                                 {isFollow ? 'unfollow' : 'follow'}
                             </Button>
-                            <Button variant='contained' color='primary'>send message</Button>
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                onClick={sendMessageClickHandler}
+                            >send message</Button>
                         </div>
+                }
+                {
+                    showSendMessage && !isOwner &&
+                            <SendMessageModal
+                                userId={userId ? userId : 0}
+                                sendHandler={sendMessageHandler}
+                                open={showSendMessage}
+                                setOpen={setShowSendMessage}
+                                sendToName={fullName} 
+                            />
                 }
             </div>
             <div className={classes.info}>

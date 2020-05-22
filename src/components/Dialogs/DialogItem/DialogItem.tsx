@@ -51,9 +51,13 @@ const DialogItem: React.FC<TProps> = ({name, onClick, avatar, newMessagesCount, 
                     src={avatar ? avatar : undefined}
                     style={{border: selected ? '2px solid #0808f9' : 'none'}}
                 />
-                <StyledBadge badgeContent={newMessagesCount} color="secondary" max={100} >
-                    <strong style={{color: selected ? '#0808f9' : '#000'}}>{name}</strong>
-                </StyledBadge>
+                {
+                    newMessagesCount ?
+                        <StyledBadge badgeContent={newMessagesCount} color="secondary" max={100} >
+                            <strong style={{color: selected ? '#0808f9' : '#000'}}>{name}</strong>
+                        </StyledBadge> :
+                        name 
+                }
             </Button>
         </ListItem>
     )

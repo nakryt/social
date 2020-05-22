@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 import formatText from '../utils/formatText'
-import { List, ListItem, Badge } from '@material-ui/core'
-import { makeStyles, createStyles, Theme, withStyles } from '@material-ui/core/styles'
+import { List, ListItem } from '@material-ui/core'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import { newMessages as newMessagesSelector } from '../redux/selectors/dialogsSelectors'
 

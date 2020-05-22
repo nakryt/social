@@ -13,3 +13,5 @@ export const messages = createSelector(dialogs, selectedDialog, (dlg, selDlg) =>
 export const newMessages = createSelector(root, d => d.newMessages)
 export const loadingDialogs = createSelector(root, d => d.loadingDialogs)
 export const loadingMessages = createSelector(root, d => d.loadingMessages)
+export const page = createSelector(root, d => d.page)
+export const pageSize = createSelector(root, d => d.pageSize)

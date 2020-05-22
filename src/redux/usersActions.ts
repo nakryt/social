@@ -44,6 +44,23 @@ export const unmount = (): TThunkResult<void> => (dispatch) => {
     dispatch(actions.setTotalCount(0))
     dispatch(actions.setError([]))
 }
+export const getUsers = (pageNumber: number, pageSize: number = 8) :TThunkResult<Promise<void>> => async (dispatch, getState) => {
+    try {
+        const { loading } = getState().users
+        if (!loading) {
+            dispatch(actions.setLoading(true))
+            const res = await usersAPI.getUsers(pageSize, pageNumber)
+            if (typeof res !== 'number') {
+                dispatch(actions.addUsersItems(res.items))
+                dispatch(actions.setTotalCount(res.totalCount))
+                dispatch(actions.setError(res.error))
+            } 
+            dispatch(actions.setLoading(false))
+        }
+    } catch (e) {
+        console.log(e.messages)
+    }
+}
 export const setNextPage = (): TThunkResult<Promise<void>> => async (dispatch, getState) => {
     const {pageNumber: page, pageSize} = getState().users
     dispatch(actions.setPageNumber(page + 1))
@@ -67,7 +84,7 @@ const following = async (following: boolean = true, userId: number, dispatch: Di
 export const setFollowing = (userId: number): TThunkResult<Promise<void>> => async (dispatch, getState) => {
     try {
         const {items} = getState().users
-        if (items) {
+        if (items.length) {
             following(items.find(i => i.id === userId)?.followed, userId, dispatch)                
         } else {
             const { isFollow } = getState().profile
@@ -76,23 +93,6 @@ export const setFollowing = (userId: number): TThunkResult<Promise<void>> => asy
         }
     } catch (e) {
         console.log(e.message)
-    }
-}
-export const getUsers = (pageNumber: number, pageSize: number = 8) :TThunkResult<Promise<void>> => async (dispatch, getState) => {
-    try {
-        const { loading } = getState().users
-        if (!loading) {
-            dispatch(actions.setLoading(true))
-            const res = await usersAPI.getUsers(pageSize, pageNumber)
-            if (typeof res !== 'number') {
-                dispatch(actions.addUsersItems(res.items))
-                dispatch(actions.setTotalCount(res.totalCount))
-                dispatch(actions.setError(res.error))
-            } 
-            dispatch(actions.setLoading(false))
-        }
-    } catch (e) {
-        console.log(e.messages)
     }
 }
 

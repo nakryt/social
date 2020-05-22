@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useRef, useCallback, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+
 import { List, Grid, CircularProgress } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import { ResultCode } from '../../types/resultCodes'
 import { TDialogs, TMessages } from '../../types/dialogs'
 
+import { pageSize as pageSizeSelector } from '../../redux/selectors/dialogsSelectors'
 import DialogItem from './DialogItem/DialogItem'
 import Messages from './Messages/Messages'
 import TextFieldWithButton from '../UI/TextFieldWithButton'
@@ -40,15 +43,38 @@ type TProps = {
     selectedDialog: number | null
     getMessages: (id: number) => void
     sendHandler: (value: string) => ResultCode
+    setNextPage: () => void
 }
 
-const Dialogs: React.SFC<TProps> = ({ dialogs, selectedDialog, loadingMessages, messages, sendHandler, getMessages }) => {
+const Dialogs: React.SFC<TProps> = ({
+            dialogs, selectedDialog, loadingMessages, messages, 
+            sendHandler, getMessages, setNextPage
+        }) => {
     const classes = useStyles()
     const loadingMessagesStyle = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
     }
+    const pageSize = useSelector(pageSizeSelector)
+    const listRef = useRef<HTMLDivElement>(null)
+    const element = listRef?.current
+    const scrollHandler = useCallback(() => {
+        if (element && element.scrollTop === 0) {
+            setNextPage()
+        }
+}, [element, setNextPage])
+    useEffect(() => {
+        if (element) {
+            element.addEventListener('scroll', scrollHandler)
+            if (!loadingMessages)
+                element.scrollBy(0, typeof element.offsetHeight === 'number' ? element.offsetHeight : 0)
+        }
+        return () => {
+            element && element.removeEventListener('scroll', scrollHandler)
+        }
+    }, [scrollHandler, element, loadingMessages, messages, pageSize])
+    
 
     return (
         <Grid container>
@@ -71,10 +97,11 @@ const Dialogs: React.SFC<TProps> = ({ dialogs, selectedDialog, loadingMessages, 
                 <Grid item sm={8}
                     className={classes.messages}
                     style={loadingMessages ? loadingMessagesStyle : undefined}
+                    ref={listRef}
                 >
                     {
-                        loadingMessages ? <CircularProgress size={80} /> :
-                        <Messages messages={messages}/>
+                        loadingMessages && messages && !messages.length ? <CircularProgress size={80} /> :
+                        <Messages messages={messages} loading={loadingMessages} />
                     }
                 </Grid>
             </Grid>

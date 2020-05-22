@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, OutlinedInput, Grid } from '@material-ui/core'
+import { Button, OutlinedInput } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import { ResultCode } from '../../types/resultCodes'
@@ -8,21 +8,19 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: '100%',
-            maxWidth: 700
-        },
-        form: {
-            width: '100%'
+            maxWidth: 700,
+            display: 'flex',
+            flexDirection: 'column'
         },
         input: {
             width: '100%',
-            marginBottom: theme.spacing(1)
+            marginBottom: theme.spacing(1),
+            backgroundColor: '#fff'
         },
         button: {
             display: 'flex',
-            justifyContent: 'flex-end',
-            '& button': {
-                marginRight: theme.spacing(2)
-            }
+            alignSelf: 'flex-end',
+            marginRight: theme.spacing(2)
         }
     }),
 )
@@ -38,23 +36,29 @@ const TextFieldWithButton: React.FC<TProps> = ({ onClick, buttonName }) => {
     const changeHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value)
     }
-    const onClickHandler = async () => {
+    const onClickHandler = () => {
         if (value.length) {
-            const res = await onClick(value)            
+            const res = onClick(value)            
             res === ResultCode.Success && setValue('')
         }
     }
     return (
-        <Grid container className={classes.root}>
-            <form className={classes.form}>
-                <Grid container item>
-                    <OutlinedInput className={classes.input} rows={2} value={value} required multiline onChange={changeHandler} />
-                </Grid>
-                <Grid item className={classes.button}>
-                    <Button variant='contained' color='primary' onClick={onClickHandler}>{buttonName}</Button>
-                </Grid>
-            </form>
-        </Grid>
+        <form className={classes.root}>
+            <OutlinedInput
+                className={classes.input}
+                rows={2}
+                value={value}
+                required
+                multiline
+                onChange={changeHandler}
+            />
+            <Button
+                className={classes.button}
+                variant='contained'
+                color='primary'
+                onClick={onClickHandler}
+            >{buttonName}</Button>
+        </form>
     )
 };
 

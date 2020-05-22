@@ -3,37 +3,11 @@ import { useDispatch } from 'react-redux'
 import { setNextPage } from '../../redux/usersActions'
 import { TUser } from '../../types/users'
 
-import { CircularProgress, Grid } from '@material-ui/core' 
+import { CircularProgress, Grid, Fade } from '@material-ui/core' 
 import { DoubleArrow } from '@material-ui/icons' 
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles' 
-
+import classes from './Users.module.css'
 import UserItem from './UserItem'
 
-const useStyles = (makeStyles((theme: Theme) => 
-        createStyles({
-            root: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%'
-            },
-            loading: {
-                display: 'flex',
-                justifyContent: 'center',
-                width: '100%',
-                marginTop: theme.spacing(1),
-                marginBottom: theme.spacing(3),
-            },
-            arrow: {
-                position: 'fixed',
-                bottom: 60,
-                left: 60,
-                transform: 'rotate(-90deg)',
-                cursor: 'pointer'
-            }
-        })
-    )
-)
 
 type TProps = {
     loading: boolean
@@ -41,7 +15,6 @@ type TProps = {
 }
 
 const Users:React.FC<TProps> = ({loading, users}) => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const mainRef = useRef<HTMLDivElement | null>(null)
     const [showArrow, setShowArrow] = useState(false)
@@ -79,12 +52,14 @@ const Users:React.FC<TProps> = ({loading, users}) => {
 
     return (
         <div ref={mainRef} className={classes.root}>
-            { showArrow && <DoubleArrow
-                                fontSize='large'
-                                color='primary'
-                                className={classes.arrow}
-                                onClick={scrollUpClickHandler}
-                            /> }
+            <Fade in={showArrow}>
+                <DoubleArrow
+                    fontSize='large'
+                    color='primary'
+                    className={classes.arrow}
+                    onClick={scrollUpClickHandler}
+                />
+            </Fade>
             {
                 !users?.length ? 
                     <CircularProgress size={120} /> :

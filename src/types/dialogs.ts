@@ -22,5 +22,6 @@ export type TDialog = {
     photos: {small: null | string, large: null | string}
     userName: string
     messages: TMessages
+    totalCount: number
 }
 export type TDialogs = Array<TDialog>
