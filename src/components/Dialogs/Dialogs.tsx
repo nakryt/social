@@ -46,7 +46,7 @@ type TProps = {
     setNextPage: () => void
 }
 
-const Dialogs: React.SFC<TProps> = ({
+const Dialogs: React.FC<TProps> = ({
             dialogs, selectedDialog, loadingMessages, messages, 
             sendHandler, getMessages, setNextPage
         }) => {

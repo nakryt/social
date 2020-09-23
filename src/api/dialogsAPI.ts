@@ -25,14 +25,14 @@ const sendMessage = async (userId: number, text: string) => {
         console.log(e.message)
     }
 }
-type TGetMessages = {
+type TGetMessagesResponse = {
     error: null | string[]
     items: TMessages
     totalCount: number
 }
 const getMessages = async (userId: number, page = 1, count = 10) => {
     try {
-        const response: TGetMessages = (await instance.get(`dialogs/${userId}/messages/?page=${page}&count=${count}`)).data
+        const response: TGetMessagesResponse = (await instance.get(`dialogs/${userId}/messages/?page=${page}&count=${count}`)).data
         return response
     } catch (e) {
         throw new Error(e.messages)

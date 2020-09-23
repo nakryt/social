@@ -1,17 +1,35 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
-import Profile from './Profile/Profile'
-import Dialogs from './Dialogs/DialogsContainer'
+
 import Login from './Login'
-import Users from './Users/UsersContainer'
+import Profile from './Profile/Profile'
+
+// const Login = lazy(() => import('./Login'))
+// const Profile = lazy(() => import('./Profile/Profile'))
+const Dialogs = lazy(() => import('./Dialogs/DialogsContainer'))
+const Users = lazy(() => import('./Users/UsersContainer'))
+
 
 const Main: React.FC = () => {
     return (
         <Switch>
             <Route path='/profile/:id?' component={Profile} />
-            <Route path='/messages' component={Dialogs} />
-            <Route path='/users' component={Users} />
-            <Route path='/login' component={Login} />
+            <Route path='/messages' render={() => {
+                    return <Suspense fallback={<div>Loading...</div>}>
+                                <Dialogs />
+                            </Suspense>
+                    }
+                }
+            />
+            <Route path='/users' render={() => {
+                    return <Suspense fallback={<div>Loading...</div>}>
+                                <Users />
+                            </Suspense>
+                    }
+                }
+            />
+            
+            <Route path='/login' component={Login}/>
             <Route path='/' exact component={Login} />
             <Redirect to='/' />
         </Switch>

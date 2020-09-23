@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { RouteComponentProps, Redirect } from 'react-router-dom'
+import { Redirect, useParams } from 'react-router-dom'
 
 import { CircularProgress } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
@@ -43,11 +43,12 @@ interface MatchProps {
     id: string 
 }
 
-const Profile: React.FC<RouteComponentProps<MatchProps>> = ({match: {params}}) => {
+const Profile: React.FC = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const loading = useSelector(loadingData)
     const id = useSelector(userIdSelector)
+    const params = useParams<MatchProps>()
     const userId = parseInt(params.id) || id 
     const posts = useSelector(postsSelector)
     const addPostHandler = (value: string) => {
@@ -73,7 +74,7 @@ const Profile: React.FC<RouteComponentProps<MatchProps>> = ({match: {params}}) =
 
     return (
         <div>
-            {!userId && <Redirect to='/' />}
+            { !userId && <Redirect to='/' /> }
             {
                 loading ? <CircularProgress size={120} /> :
                     <>
