@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 paddingTop: 0,
                 paddingBottom: 0,
                 paddingRight: 0,
+                flexDirection: 'column'
             }
         },
         navbar: {

@@ -49,6 +49,13 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center'
+        },
+        demoAcc: {
+            marginTop: 150
+        },
+        demoAccTitle: {
+            fontWeight: 700,
+            marginRight: '1rem'
         }
     })
 )
@@ -73,9 +80,9 @@ const Login: React.FC<TProps> = () => {
         setShowPassword(!showPassword)
     }
     const [isLogin, setIsLogin] = useState(false)
-    const onSubmit = async ({email, password, rememberMe, captcha = null}: TFormData) => {
+    const onSubmit = ({email, password, rememberMe, captcha = null}: TFormData) => {
         if (isLogin) {
-            const res = await dispatch(login(email, password, rememberMe, captcha))
+            const res = dispatch(login(email, password, rememberMe, captcha))
             if (typeof res === 'string') {
                 setError(res)
             }
@@ -195,6 +202,11 @@ const Login: React.FC<TProps> = () => {
                 </div>
 
             </form>
+            <div className={classes.demoAcc}>
+                <span className={classes.demoAccTitle}>Demo account:</span>
+                <span style={{marginRight: '0.5rem'}}><b>login:</b>&nbsp;pestov.v@yahoo.com</span>
+                <span><b>password:</b>&nbsp;123456</span>
+            </div>
         </>
     )
 }
