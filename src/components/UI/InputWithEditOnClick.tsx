@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles'
+import { Tooltip } from '@material-ui/core'
 import {DoneTwoTone, Close} from '@material-ui/icons'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -79,12 +80,14 @@ const InputWithEdit: React.FC<TProps> = ({text, onSave, inputName, canEdit}) => 
                             <Close style={{color: 'red', cursor: 'pointer'}} onClick={editCancel} />
                         </span>
                     </span> :
-                    <span
-                        style={{display: !isEdit ? 'flex' : 'none'}}
-                        onDoubleClick={() => {canEdit && setIsEdit(true)}}
-                    >
-                        {text}
-                    </span>
+                    <Tooltip title='For edit - Double Click' placement='right'>
+                        <span
+                            style={{display: !isEdit ? 'flex' : 'none'}}
+                            onDoubleClick={() => {canEdit && setIsEdit(true)}}
+                        >
+                            {text}
+                        </span>
+                    </Tooltip>
             }
         </>
     )

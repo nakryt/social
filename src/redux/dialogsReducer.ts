@@ -70,14 +70,17 @@ const dialogsReducer = (state = initialState, action: TDialogsActions): TDialogs
                 })
              }
         case RESET_NEW_MESSAGES: 
+            let readMessagesCount = 0
             return {
                 ...state,
                 data: state.data.map(item => {
                     if (item.id === action.payload) {
+                        readMessagesCount = item.newMessagesCount
                         return { ...item, newMessagesCount: 0, hasNewMessages: false }
                     }
                     return item
                 }),
+                newMessages: state.newMessages - readMessagesCount
             }
         case SET_MESSAGES_COUNT: 
             return {

@@ -105,9 +105,12 @@ const Dialogs: React.FC<TProps> = ({
                     }
                 </Grid>
             </Grid>
-            <Grid item container className={classes.input}>
-                <TextFieldWithButton onClick={sendHandler} buttonName='send' />
-            </Grid>
+            {
+                selectedDialog &&
+                    <Grid item container className={classes.input}>
+                        <TextFieldWithButton onClick={sendHandler} buttonName='send' />
+                    </Grid>
+            }
         </Grid>
     )
 };

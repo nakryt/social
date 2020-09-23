@@ -51,11 +51,15 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center'
         },
         demoAcc: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
             marginTop: 150
         },
         demoAccTitle: {
+            fontSize: '1.2rem',
             fontWeight: 700,
-            marginRight: '1rem'
+            marginBottom: '0.5rem'
         }
     })
 )
