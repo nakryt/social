@@ -7,8 +7,8 @@ import store from './redux/store'
 import {initialization as initSelector} from './redux/selectors/appSelectors'
 import {initialization as init} from './redux/appActions'
 
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
-import {Container, Grid, CircularProgress} from '@material-ui/core'
+import {makeStyles, createStyles, Theme, useTheme} from '@material-ui/core/styles'
+import {Container, Grid, CircularProgress, Hidden, useMediaQuery} from '@material-ui/core'
 
 import Header from './components/Header'
 import Navbar from './components/Navbar'
@@ -17,11 +17,11 @@ import Main from './components/Main'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            minHeight: '100vh'
+            minHeight: '100vh',
         },
         main: {
-            padding: theme.spacing(2),
-            marginTop: 0,
+            marginTop: theme.spacing(2),
+            marginBottom: theme.spacing(4),
             '& .mainContent': {
                 flexGrow: 1,
                 justifyContent: 'center',
@@ -40,6 +40,8 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 function App() {
+    const theme = useTheme()
+    const isLaptop = useMediaQuery(theme.breakpoints.down('sm'))
     const classes = useStyles()
     const dispatch = useDispatch()
     const initialization = useSelector(initSelector)
@@ -55,11 +57,18 @@ function App() {
                     initialization ? <CircularProgress size={120} /> :
                     <Container className={classes.root}>
                         <Header/>
-                        <Grid container className={classes.main} spacing={4}>
-                            <Grid container xs={4} sm={3} md={2} item className={classes.navbar} spacing={0}>
-                                <Navbar/>
-                            </Grid>
-                            <Grid container xs={8} sm={9} md={10} item className={'mainContent'} spacing={0}>
+                        <Grid container className={classes.main}>
+                            <Hidden smDown>
+                                <Grid container sm={3} md={2} item
+                                    className={classes.navbar}
+                                    spacing={0}>
+                                    <Navbar/>
+                                </Grid>
+                            </Hidden>
+                            <Grid container sm={12} md={10} item
+                                className={'mainContent'} spacing={0}
+                                style={{ paddingLeft: isLaptop ? 0 : theme.spacing(2) }}
+                            >
                                 <Main/>
                             </Grid>
                         </Grid>

@@ -2,9 +2,9 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import { ExitToAppOutlined, LockOpen, ExpandMore } from '@material-ui/icons'
-import { AppBar, Toolbar, Typography, Button, Avatar, Menu, MenuItem } from '@material-ui/core'
+import { makeStyles, createStyles, Theme, useTheme } from '@material-ui/core/styles'
+import { ExitToAppOutlined, LockOpen, ExpandMore, Menu as MenuIcon } from '@material-ui/icons'
+import { AppBar, Toolbar, Typography, Button, Avatar, Menu, MenuItem, useMediaQuery } from '@material-ui/core'
 
 import { isAuthSelector } from '../redux/selectors/authSelectors'
 import { avatarOwnerSmall } from '../redux/selectors/profileSelectors'
@@ -17,7 +17,17 @@ const useStyles = makeStyles((theme: Theme) =>
             '& a': {
                 textDecoration: 'none',
                 color: '#fff'
+            },
+        },
+        toolbar: {
+            justifyContent: 'space-between',
+            '& .MuiButton-root': {
+                minWidth: 0
             }
+        },
+        menuButton: {
+            padding: 0,
+            color: '#fff'
         },
         title: {
             flexGrow: 1
@@ -57,6 +67,8 @@ const useStyles = makeStyles((theme: Theme) =>
 type TProps = {}
 
 const Header: React.FC<TProps> = () => {
+    const theme = useTheme()
+    const isLaptop = useMediaQuery(theme.breakpoints.down('sm'))
     const classes = useStyles()
     const dispatch = useDispatch()
     const isAuth = useSelector(isAuthSelector)
@@ -75,11 +87,15 @@ const Header: React.FC<TProps> = () => {
     }
     return (
         <AppBar position="static" className={classes.root}>
-            <Toolbar>
-                <Typography variant="h6" className={classes.title}>
-                    Logo
-                </Typography>
+            <Toolbar className={classes.toolbar}>
+                {
+                    isLaptop ?
+                        <Button className={classes.menuButton}><MenuIcon fontSize='large' /></Button> :
+                        <Typography variant="h6" className={classes.title}>
+                            Logo
+                        </Typography>
 
+                }
                 {
                     isAuth ?
                         <>

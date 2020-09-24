@@ -80,7 +80,7 @@ const InputWithEdit: React.FC<TProps> = ({text, onSave, inputName, canEdit}) => 
                             <Close style={{color: 'red', cursor: 'pointer'}} onClick={editCancel} />
                         </span>
                     </span> :
-                    <Tooltip title='For edit - Double Click' placement='right'>
+                    <Tooltip title='For edit - Double Click' placement='top-start'>
                         <span
                             style={{display: !isEdit ? 'flex' : 'none'}}
                             onDoubleClick={() => {canEdit && setIsEdit(true)}}

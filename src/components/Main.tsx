@@ -4,8 +4,6 @@ import { Route, Redirect, Switch } from 'react-router-dom'
 import Login from './Login'
 import Profile from './Profile/Profile'
 
-// const Login = lazy(() => import('./Login'))
-// const Profile = lazy(() => import('./Profile/Profile'))
 const Dialogs = lazy(() => import('./Dialogs/DialogsContainer'))
 const Users = lazy(() => import('./Users/UsersContainer'))
 
