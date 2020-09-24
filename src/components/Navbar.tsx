@@ -12,9 +12,13 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             display: 'flex',
+            width: '100%'
         },
         list: {
             paddingTop: theme.spacing(4),
+            '& .MuiListItem-gutters': {
+                paddingLeft: theme.spacing(4)
+            },
         },
         link: {
             marginBottom: theme.spacing(2),
