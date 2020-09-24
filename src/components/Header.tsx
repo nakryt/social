@@ -9,6 +9,7 @@ import { AppBar, Toolbar, Typography, Button, Avatar, Menu, MenuItem, useMediaQu
 import { isAuthSelector } from '../redux/selectors/authSelectors'
 import { avatarOwnerSmall } from '../redux/selectors/profileSelectors'
 import { logout } from '../redux/authActions'
+import logoImg from '../assets/logo.png'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -90,11 +91,10 @@ const Header: React.FC<TProps> = () => {
             <Toolbar className={classes.toolbar}>
                 {
                     isLaptop ?
-                        <Button className={classes.menuButton}><MenuIcon fontSize='large' /></Button> :
-                        <Typography variant="h6" className={classes.title}>
-                            Logo
-                        </Typography>
-
+                        <Button className={classes.menuButton}>
+                            <MenuIcon fontSize='large' />
+                        </Button> :
+                        <img src={logoImg} alt='logo' width={70} height={70} style={{marginTop: 5}} />
                 }
                 {
                     isAuth ?
