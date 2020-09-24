@@ -15,7 +15,6 @@ import { ReactComponent as DefaultAvatar } from '../../../assets/man.svg'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            position: 'relative',
             marginRight: theme.spacing(2)
         },
         avatar: {

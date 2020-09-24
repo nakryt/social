@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import { Button } from '@material-ui/core'
+import { Button, Grid } from '@material-ui/core'
 import { CheckCircleOutline, NotInterestedOutlined } from '@material-ui/icons'
 
 import { userProfile, status, loadingData, isFollow as followSelector } from '../../../redux/selectors/profileSelectors'
@@ -125,9 +125,9 @@ const UserInfo:React.FC = () => {
     }
     
     return (
-        <div className={classes.root}>
+        <Grid container spacing={2} className={classes.root}>
 
-            <div className={classes.avatarWrap}>
+            <Grid xs={12} sm={4} md={3} item className={classes.avatarWrap}>
                 <UserAvatar />
                 {
                     !isOwner &&
@@ -157,8 +157,8 @@ const UserInfo:React.FC = () => {
                                 sendToName={fullName} 
                             />
                 }
-            </div>
-            <div className={classes.info}>
+            </Grid>
+            <Grid item xs={12} sm={8} md={9} className={classes.info}>
                 <p className={classes.status}>
                     <InputWithEditC
                         inputName={null}
@@ -224,9 +224,9 @@ const UserInfo:React.FC = () => {
                     <Contacts isOwner={isOwner} contacts={profile.contacts} saveHandler={saveInfoContactsHandler} />
                     
                 </div>
-            </div>
+            </Grid>
 
-        </div>
+        </Grid>
     )
 }
 
